@@ -6,13 +6,13 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 03:08:36 by adesvall          #+#    #+#             */
-/*   Updated: 2020/11/25 13:46:40 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/11/26 17:53:09 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t		ft_strlen(const char *s)
+size_t	ft_strlen(const char *s)
 {
 	int i;
 
@@ -53,7 +53,7 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	return (dest);
 }
 
-char		*join_and_realloc(char const *s1, char const *s2)
+char	*join_and_realloc(char const *s1, char const *s2)
 {
 	size_t	lens1;
 	size_t	lens2;
@@ -71,20 +71,20 @@ char		*join_and_realloc(char const *s1, char const *s2)
 	ft_memmove(res, s1, lens1);
 	ft_memmove(res + lens1, s2, lens2);
 	res[lentot - 1] = '\0';
-	free(s1);
+	free((void*)s1);
 	return (res);
 }
 
-int	is_endofline(char *buf)
+int		is_endofline(char *ligne)
 {
 	int i;
 
 	i = 0;
-	if (!buf)
+	if (!ligne)
 		return (0);
-	while (buf[i])
+	while (ligne[i])
 	{
-		if (buf[i] == '\n')
+		if (ligne[i] == '\n')
 			return (1);
 		i++;
 	}

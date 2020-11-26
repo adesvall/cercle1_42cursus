@@ -6,24 +6,73 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 02:38:25 by adesvall          #+#    #+#             */
-/*   Updated: 2020/11/25 13:47:11 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/11/26 18:22:23 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	get_next_line(int fd, char **line)
+char	*trimstart(char *ligne)
 {
-	static int	linenu;
+	char	*res;
+	int		i;
+	int		j;
+
+	i = 0;
+	if (!ligne)
+		return (0);
+	while (ligne[i] && ligne[i] != '\n')
+		i++;
+	if (!ligne[i])
+	{
+		free(ligne);
+		return (0);
+	}
+	if (!(res = malloc(sizeof(char) * ((ft_strlen(ligne) - i) + 1))))
+		return (0);
+	i++;
+	j = 0;
+	while (ligne[i])
+		res[j++] = ligne[i++];
+	res[j] = '\0';
+	free(ligne);
+	return (res);
+}
+
+char	*trimend(char *str)
+{
+	int		i;
+	char	*rtn;
+
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i] && str[i] != '\n')
+		i++;
+	if (!(rtn = malloc(sizeof(char) * (i + 1))))
+		return (0);
+	i = 0;
+	while (str[i] && str[i] != '\n')
+	{
+		rtn[i] = str[i];
+		i++;
+	}
+	rtn[i] = '\0';
+	return (rtn);
+}
+
+int		get_next_line(int fd, char **line)
+{
 	char		*buf;
 	int			resread;
-	char		*ligne;
+	static char	*ligne;
 
+	resread = 1;
 	if (fd < 0 || !line || BUFFER_SIZE <= 0)
 		return (-1);
 	if (!(buf = malloc(sizeof(char) * (BUFFER_SIZE + 1))))
 		return (-1);
-	while (!is_endofline(buf) && resread != 0)
+	while (!is_endofline(ligne) && resread != 0)
 	{
 		if ((resread = read(fd, buf, BUFFER_SIZE)) == -1)
 		{
@@ -33,11 +82,10 @@ int	get_next_line(int fd, char **line)
 		buf[resread] = '\0';
 		ligne = join_and_realloc(ligne, buf);
 	}
-
-	
 	free(buf);
-	if (resread == 0)
+	*line = trimend(ligne);
+	ligne = trimstart(ligne);
+	if (resread == 0 && !is_endofline(ligne))
 		return (0);
 	return (1);
-	
 }
