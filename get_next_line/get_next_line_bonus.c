@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 02:38:25 by adesvall          #+#    #+#             */
-/*   Updated: 2020/11/30 19:01:27 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/11/30 19:03:18 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,39 +92,33 @@ int		get_next_line(int fd, char **line)
 {
 	char			*buf;
 	int				resread;
-	static t_save	**savebegin = 0;
+	static t_save	*savebegin = 0;
 	t_save			*save;
 
 	resread = 1;
 	if (fd < 0 || !line || BUFFER_SIZE <= 0)
 		return (-1);
-	if (savebegin == 0)
-	{
-		if (!(savebegin = malloc(sizeof(t_save*))))
-			return (-1);
-		*savebegin = 0;
-	}
-	if (!(save = ft_lstfind_fd(fd, savebegin)))
-		return (ft_clean(savebegin, -1));
+	if (!(save = ft_lstfind_fd(fd, &savebegin)))
+		return (ft_clean(&savebegin, -1));
 	if (!(buf = malloc(sizeof(char) * (BUFFER_SIZE + 1))))
-		return (ft_clean(savebegin, -1));
+		return (ft_clean(&savebegin, -1));
 	while (!is_endofline(save->ligne) && resread != 0)
 	{
 		if ((resread = read(fd, buf, BUFFER_SIZE)) == -1)
 		{
 			free(buf);
-			return (ft_clean(savebegin, -1));
+			return (ft_clean(&savebegin, -1));
 		}
 		buf[resread] = '\0';
 		if (!(save->ligne = join_and_realloc(save->ligne, buf)))
-			return (ft_clean(savebegin, -1));
+			return (ft_clean(&savebegin, -1));
 	}
 	free(buf);
 	if (!(*line = trimend(save->ligne)))
-		return (ft_clean(savebegin, -1));
+		return (ft_clean(&savebegin, -1));
 	if (!(save->ligne = trimstart(save->ligne)))
-		return (ft_clean(savebegin, -1));
+		return (ft_clean(&savebegin, -1));
 	if (resread == 0) // && !is_endofline(save->ligne))
-		return (ft_clean(savebegin, fd));
+		return (ft_clean(&savebegin, fd));
 	return (1);
 }
