@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 02:38:25 by adesvall          #+#    #+#             */
-/*   Updated: 2020/11/30 19:00:16 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/11/30 19:01:27 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int		get_next_line(int fd, char **line)
 {
 	char			*buf;
 	int				resread;
-	static t_save	*savebegin = 0;
+	static t_save	**savebegin = 0;
 	t_save			*save;
 
 	resread = 1;
