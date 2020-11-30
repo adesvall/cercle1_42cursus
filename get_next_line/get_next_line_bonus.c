@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 02:38:25 by adesvall          #+#    #+#             */
-/*   Updated: 2020/11/30 19:03:18 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/11/30 19:42:02 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,22 +45,18 @@ char	*trimstart(char *ligne)
 		return (0);
 	while (ligne[i] && ligne[i] != '\n')
 		i++;
-
 	if (!(res = malloc(sizeof(char) * ((ft_strlen(ligne) - i) + 1))))
 	{
 		free(ligne);
 		return (0);
 	}
-	if (!ligne[i])
-	{
-		free(ligne);
-		*res = 0;
-		return (res);
-	}
-	i++;
 	j = 0;
-	while (ligne[i])
-		res[j++] = ligne[i++];
+	if (ligne[i])
+	{
+		i++;
+		while (ligne[i])
+			res[j++] = ligne[i++];
+	}
 	res[j] = '\0';
 	free(ligne);
 	return (res);
@@ -90,35 +86,41 @@ char	*trimend(char *str)
 
 int		get_next_line(int fd, char **line)
 {
-	char			*buf;
-	int				resread;
 	static t_save	*savebegin = 0;
 	t_save			*save;
 
-	resread = 1;
 	if (fd < 0 || !line || BUFFER_SIZE <= 0)
 		return (-1);
 	if (!(save = ft_lstfind_fd(fd, &savebegin)))
 		return (ft_clean(&savebegin, -1));
+	return (get_next_line2(&savebegin, save, line, fd));
+}
+
+int		get_next_line2(t_save **lstbegin, t_save *save, char **line, int fd)
+{
+	char	*buf;
+	int		resread;
+
 	if (!(buf = malloc(sizeof(char) * (BUFFER_SIZE + 1))))
-		return (ft_clean(&savebegin, -1));
+		return (ft_clean(lstbegin, -1));
+	resread = 1;
 	while (!is_endofline(save->ligne) && resread != 0)
 	{
 		if ((resread = read(fd, buf, BUFFER_SIZE)) == -1)
 		{
 			free(buf);
-			return (ft_clean(&savebegin, -1));
+			return (ft_clean(lstbegin, -1));
 		}
 		buf[resread] = '\0';
 		if (!(save->ligne = join_and_realloc(save->ligne, buf)))
-			return (ft_clean(&savebegin, -1));
+			return (ft_clean(lstbegin, -1));
 	}
 	free(buf);
 	if (!(*line = trimend(save->ligne)))
-		return (ft_clean(&savebegin, -1));
+		return (ft_clean(lstbegin, -1));
 	if (!(save->ligne = trimstart(save->ligne)))
-		return (ft_clean(&savebegin, -1));
-	if (resread == 0) // && !is_endofline(save->ligne))
-		return (ft_clean(&savebegin, fd));
+		return (ft_clean(lstbegin, -1));
+	if (resread == 0)
+		return (ft_clean(lstbegin, fd));
 	return (1);
 }
