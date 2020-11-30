@@ -6,15 +6,15 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 02:38:25 by adesvall          #+#    #+#             */
-/*   Updated: 2020/11/26 22:43:43 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/11/30 19:00:16 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-savefd	*ft_lstfind_fd(int fd, savefd **lst)
+t_save	*ft_lstfind_fd(int fd, t_save **lst)
 {
-	savefd	*res;
+	t_save	*res;
 
 	if (!lst)
 		return (0);
@@ -25,7 +25,7 @@ savefd	*ft_lstfind_fd(int fd, savefd **lst)
 			return (res);
 		res = res->next;
 	}
-	if (!(res = malloc(sizeof(savefd))))
+	if (!(res = malloc(sizeof(t_save))))
 		return (0);
 	res->fd = fd;
 	res->ligne = 0;
@@ -33,7 +33,6 @@ savefd	*ft_lstfind_fd(int fd, savefd **lst)
 	*lst = res;
 	return (res);
 }
-
 
 char	*trimstart(char *ligne)
 {
@@ -46,13 +45,18 @@ char	*trimstart(char *ligne)
 		return (0);
 	while (ligne[i] && ligne[i] != '\n')
 		i++;
-	if (!ligne[i])
+
+	if (!(res = malloc(sizeof(char) * ((ft_strlen(ligne) - i) + 1))))
 	{
 		free(ligne);
 		return (0);
 	}
-	if (!(res = malloc(sizeof(char) * ((ft_strlen(ligne) - i) + 1))))
-		return (0);
+	if (!ligne[i])
+	{
+		free(ligne);
+		*res = 0;
+		return (res);
+	}
 	i++;
 	j = 0;
 	while (ligne[i])
@@ -88,37 +92,39 @@ int		get_next_line(int fd, char **line)
 {
 	char			*buf;
 	int				resread;
-	static savefd	**savebegin = 0;
-	savefd			*save;
+	static t_save	*savebegin = 0;
+	t_save			*save;
 
 	resread = 1;
 	if (fd < 0 || !line || BUFFER_SIZE <= 0)
 		return (-1);
 	if (savebegin == 0)
 	{
-		savebegin = malloc(sizeof(savefd*));
+		if (!(savebegin = malloc(sizeof(t_save*))))
+			return (-1);
 		*savebegin = 0;
 	}
-	save = ft_lstfind_fd(fd, savebegin);
+	if (!(save = ft_lstfind_fd(fd, savebegin)))
+		return (ft_clean(savebegin, -1));
 	if (!(buf = malloc(sizeof(char) * (BUFFER_SIZE + 1))))
-		return (-1);
+		return (ft_clean(savebegin, -1));
 	while (!is_endofline(save->ligne) && resread != 0)
 	{
 		if ((resread = read(fd, buf, BUFFER_SIZE)) == -1)
 		{
 			free(buf);
-			return (-1);
+			return (ft_clean(savebegin, -1));
 		}
 		buf[resread] = '\0';
-		save->ligne = join_and_realloc(save->ligne, buf);
+		if (!(save->ligne = join_and_realloc(save->ligne, buf)))
+			return (ft_clean(savebegin, -1));
 	}
 	free(buf);
-	*line = trimend(save->ligne);
-	save->ligne = trimstart(save->ligne);
-	if (resread == 0 && !is_endofline(save->ligne))
-	{
-		freeelem(savebegin, fd);
-		return (0);
-	}
+	if (!(*line = trimend(save->ligne)))
+		return (ft_clean(savebegin, -1));
+	if (!(save->ligne = trimstart(save->ligne)))
+		return (ft_clean(savebegin, -1));
+	if (resread == 0) // && !is_endofline(save->ligne))
+		return (ft_clean(savebegin, fd));
 	return (1);
 }

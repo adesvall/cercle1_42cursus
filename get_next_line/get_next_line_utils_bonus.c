@@ -6,13 +6,13 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 03:08:36 by adesvall          #+#    #+#             */
-/*   Updated: 2020/11/26 23:10:13 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/11/30 18:35:36 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-size_t	ft_strlen(const char *s)
+int		ft_strlen(const char *s)
 {
 	int i;
 
@@ -53,7 +53,7 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	return (dest);
 }
 
-char	*join_and_realloc(char const *s1, char const *s2)
+char	*join_and_realloc(char *s1, char *s2)
 {
 	size_t	lens1;
 	size_t	lens2;
@@ -62,16 +62,20 @@ char	*join_and_realloc(char const *s1, char const *s2)
 
 	if (!s1 && !s2)
 		return (0);
-	lens1 = ft_strlen((char *)s1);
-	lens2 = ft_strlen((char *)s2);
+	lens1 = ft_strlen(s1);
+	lens2 = ft_strlen((s2));
 	lentot = lens1 + lens2 + 1;
 	res = malloc(sizeof(char) * lentot);
 	if (!res)
+	{
+		free(s1);
+		free(s2);
 		return (0);
+	}
 	ft_memmove(res, s1, lens1);
 	ft_memmove(res + lens1, s2, lens2);
 	res[lentot - 1] = '\0';
-	free((void*)s1);
+	free(s1);
 	return (res);
 }
 
@@ -91,19 +95,24 @@ int		is_endofline(char *ligne)
 	return (0);
 }
 
-void    freeelem(savefd **lstbegin, int fd)
+int		ft_clean(t_save **lstbegin, int fd)
 {
-	if (*lstbegin && (*lstbegin)->fd == fd && (*lstbegin)->next == 0)
+	t_save	*next;
+
+	if (!lstbegin)
+		return (-1);
+	if (fd == -1)
 	{
-		free((*lstbegin)->ligne);
+		if (*lstbegin)
+			ft_clean(&(*lstbegin)->next, -1);
 		free(*lstbegin);
-		free(lstbegin);
-		return ;
+		return (-1);
 	}
 	while (*lstbegin && (*lstbegin)->fd != fd)
 		lstbegin = &((*lstbegin)->next);
-	if (*lstbegin == 0)
-		return ;
+	next = (*lstbegin)->next;
 	free((*lstbegin)->ligne);
 	free(*lstbegin);
+	*lstbegin = next;
+	return (0);
 }
