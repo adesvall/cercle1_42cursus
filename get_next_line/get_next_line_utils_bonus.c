@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 03:08:36 by adesvall          #+#    #+#             */
-/*   Updated: 2020/11/30 19:06:06 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/01 13:55:58 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,10 @@ int		ft_clean(t_save **lstbegin, int fd)
 	if (fd == -1)
 	{
 		if (*lstbegin)
-			ft_clean(&(*lstbegin)->next, -1);
+		{
+			ft_clean(&((*lstbegin)->next), -1);
+			free((*lstbegin)->ligne);
+		}
 		free(*lstbegin);
 		return (-1);
 	}
