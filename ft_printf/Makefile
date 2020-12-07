@@ -1,6 +1,6 @@
 NAME		= libftprintf.a
 
-SRCS		= 
+SRCS		= ft_printf.c ft_display.c ft_putstrn.c flagsft.c
 
 SRCSBON		= 
 

@@ -1,36 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr.c                                     :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/20 14:08:23 by adesvall          #+#    #+#             */
-/*   Updated: 2020/11/21 22:58:47 by adesvall         ###   ########.fr       */
+/*   Created: 2020/12/04 14:19:48 by adesvall          #+#    #+#             */
+/*   Updated: 2020/12/07 16:05:36 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_putnbr_base(int n, char *base)
+int		ft_is_in(char c, const char *str)
 {
-	unsigned int	i;
-	char			c;
-	int				lenbase;
-	int				count;
-
-	lenbase = ft_strnlen(base, -1);
-	if (n < 0)
+	while (*str)
 	{
-		write(1, "-", 1);
-		count++;
-		i = -n;
+		if (c == *str)
+			return (1);
+		str++;
 	}
-	else
-		i = n;
-	if (i > 9)
-		count += ft_putnbr_base((int)(i / lenbase), base);
-	c = base[i % lenbase];
-	write(1, &c, 1);
-	return (count + 1);
+	return (0);
 }
