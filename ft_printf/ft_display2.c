@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/08 00:59:16 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/08 20:42:40 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/08 20:46:48 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,17 @@ int		disp_hexa(unsigned int n, int maj, t_flags flags)
 	char	*base;
 
 	count = 0;
-	base = (maj == 1) ? "0123456789ABCDEF" : "0123456789abcdef";
-	nbrlen = ft_unbrlen_base(n, base, flags.dot);
-	if (flags.minus == 1)
-		count += ft_putunbr_base(n, base, flags.dot);
-	count += disp_width(flags.width, nbrlen, flags.zero);
-	if (flags.minus == 0)
-		count += ft_putunbr_base(n, base, flags.dot);
+	if (n == 0 && flags.dot == 0 && flags.zero == 0)
+		count += disp_width(flags.width, 0, 0);
+	else
+	{
+		base = (maj == 1) ? "0123456789ABCDEF" : "0123456789abcdef";
+		nbrlen = ft_unbrlen_base(n, base, flags.dot);
+		if (flags.minus == 1)
+			count += ft_putunbr_base(n, base, flags.dot);
+		count += disp_width(flags.width, nbrlen, flags.zero);
+		if (flags.minus == 0)
+			count += ft_putunbr_base(n, base, flags.dot);
+	}
 	return (count);
 }
