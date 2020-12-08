@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/08 00:59:16 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/08 20:02:06 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/08 20:42:40 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,19 @@ int		disp_int(int n, t_flags flags)
 	int nbrlen;
 
 	count = 0;
-	if (n < 0 && flags.zero == 1 && flags.dot != -1)
-		flags.dot--;
-	nbrlen = ft_nbrlen_base(n, "0123456789", flags.dot);
-	if (flags.minus == 1)
-		count += ft_putnbr_base(n, "0123456789", flags.dot);
-	count += disp_width(flags.width, nbrlen, flags.zero);
-	if (flags.minus == 0)
-		count += ft_putnbr_base(n, "0123456789", flags.dot);
+	if (n == 0 && flags.dot == 0 && flags.zero == 0)
+		count += disp_width(flags.width, 0, 0);
+	else
+	{
+		if (n < 0 && flags.zero == 1 && flags.dot != -1)
+			flags.dot--;
+		nbrlen = ft_nbrlen_base(n, "0123456789", flags.dot);
+		if (flags.minus == 1)
+			count += ft_putnbr_base(n, "0123456789", flags.dot);
+		count += disp_width(flags.width, nbrlen, flags.zero);
+		if (flags.minus == 0)
+			count += ft_putnbr_base(n, "0123456789", flags.dot);
+	}
 	return (count);
 }
 
@@ -48,12 +53,17 @@ int		disp_uint(unsigned int n, t_flags flags)
 	int nbrlen;
 
 	count = 0;
-	nbrlen = ft_unbrlen_base(n, "0123456789", flags.dot);
-	if (flags.minus == 1)
-		count += ft_putunbr_base(n, "0123456789", flags.dot);
-	count += disp_width(flags.width, nbrlen, flags.zero);
-	if (flags.minus == 0)
-		count += ft_putunbr_base(n, "0123456789", flags.dot);
+	if (n == 0 && flags.dot == 0 && flags.zero == 0)
+		count += disp_width(flags.width, 0, 0);
+	else
+	{
+		nbrlen = ft_unbrlen_base(n, "0123456789", flags.dot);
+		if (flags.minus == 1)
+			count += ft_putunbr_base(n, "0123456789", flags.dot);
+		count += disp_width(flags.width, nbrlen, flags.zero);
+		if (flags.minus == 0)
+			count += ft_putunbr_base(n, "0123456789", flags.dot);
+	}
 	return (count);
 }
 
