@@ -1,6 +1,6 @@
 NAME		= libftprintf.a
 
-SRCS		= ft_printf.c ft_display.c ft_putstrn.c flagsft.c
+SRCS		= ft_printf.c ft_display.c ft_display2.c utils.c utils2.c flagsft.c
 
 SRCSBON		= 
 
@@ -16,7 +16,7 @@ $(NAME):	${OBJS}
 			ar rcs ${NAME} ${OBJS}
 
 .c.o:		
-			clang ${CFLAGS} -c $< -o ${<:.c=.o}
+			gcc ${CFLAGS} -c $< -o ${<:.c=.o}
 
 bonus:		${OBJS} ${OBJSBON}
 			rm -f ${NAME}

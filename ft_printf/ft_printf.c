@@ -6,13 +6,13 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/02 17:08:32 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/07 17:05:06 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/08 00:53:33 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-t_flags		ft_init_flags(void)
+t_flags	ft_init_flags(void)
 {
 	t_flags		flags;
 
@@ -52,7 +52,7 @@ int		parse_flags(const char *format, int i, t_flags *flags, va_list args)
 	return (i);
 }
 
-int			process_format(const char *format, va_list args)
+int		process_format(const char *format, va_list args)
 {
 	int			i;
 	t_flags		flags;
@@ -76,7 +76,7 @@ int			process_format(const char *format, va_list args)
 	return (count);
 }
 
-int		ft_printf(const char* format, ...)
+int		ft_printf(const char *format, ...)
 {
 	va_list args;
 	int		count;
