@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 16:38:27 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/08 16:49:01 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/08 19:45:49 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	flag_width(va_list args, t_flags *flags)
 	{
 		flags->minus = 1;
 		flags->width *= -1;
+		flags->zero = 0;
 	}
 }
 
@@ -40,6 +41,7 @@ int		flag_dot(const char *save, int start, t_flags *flags, va_list args)
 {
 	int i;
 
+	flags->zero = 0;
 	i = start;
 	i++;
 	if (save[i] == '*')

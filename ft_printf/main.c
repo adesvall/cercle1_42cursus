@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "ft_printf.h"
-#define ARGS "pt: %5.2X.\n", 0
+#define ARGS "%.*i\n", 6, -3
 
 int 	main()
 {
