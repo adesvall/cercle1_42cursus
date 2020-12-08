@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/07 15:20:38 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/08 16:51:25 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/08 17:13:35 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int		main_display(char c, t_flags flags, va_list args)
 {
 	int count;
 
+	count = 0;
 	if (c == 'c')
 		count = disp_char(va_arg(args, int), flags);
 	else if (c == 's')
@@ -68,9 +69,11 @@ int		disp_string(char *str, t_flags flags)
 {
 	int count;
 
+	if (!str)
+		str = "(null)";
 	if (flags.minus == 1)
 		ft_putstrn(str, flags.dot);
-	count = disp_width(flags.width, ft_strnlen(str, flags.dot), 0);
+	count = disp_width(flags.width, ft_strnlen(str, flags.dot), flags.zero);
 	if (flags.minus == 0)
 		ft_putstrn(str, flags.dot);
 	return (count + ft_strnlen(str, flags.dot));
