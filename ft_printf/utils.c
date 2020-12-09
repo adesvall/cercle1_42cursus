@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/04 14:19:48 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/08 19:54:22 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/09 01:22:13 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	ft_putunbr_base(unsigned int un, char *base, int precision)
 	return (count + 1);
 }
 
-int	ft_putull_base(unsigned long long i, char *base)
+int	ft_putull_base(unsigned long long i, char *base, int precision)
 {
 	char			c;
 	unsigned int	lenbase;
@@ -91,8 +91,8 @@ int	ft_putull_base(unsigned long long i, char *base)
 
 	count = 0;
 	lenbase = ft_strnlen(base, -1);
-	if (i >= lenbase)
-		count += ft_putull_base((i / lenbase), base);
+	if (i >= lenbase || precision > 1)
+		count += ft_putull_base((i / lenbase), base, precision - 1);
 	c = base[i % lenbase];
 	write(1, &c, 1);
 	return (count + 1);

@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/02 17:20:19 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/09 01:09:48 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/09 01:21:15 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ typedef	struct		s_flags
 
 int					ft_printf(const char *str, ...);
 int					ft_putchar(int c);
-int					ft_ulllen_base(unsigned long long i, char *base);
-int					ft_putull_base(unsigned long long n, char *base);
+int					ft_ulllen_base(unsigned long long i, char *base, int precision);
+int					ft_putull_base(unsigned long long n, char *base, int precision);
 int					ft_nbrlen_base(int n, char *base, int precision);
 int					ft_putnbr_base(int n, char *base, int precision);
 int					ft_unbrlen_base(unsigned int un, char *base, int precision);
