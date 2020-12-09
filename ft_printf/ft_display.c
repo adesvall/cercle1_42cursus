@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/07 15:20:38 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/09 01:41:41 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/09 02:01:10 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int		disp_char(int c, t_flags flags)
 
 	if (flags.minus == 1)
 		ft_putchar(c);
-	count = disp_width(flags.width, 1, 0) + 1;
+	count = disp_width(flags.width, 1, flags.zero) + 1;
 	if (flags.minus == 0)
 		ft_putchar(c);
 	return (count);
