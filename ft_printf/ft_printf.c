@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/02 17:08:32 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/08 00:53:33 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/09 01:52:18 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ int		process_format(const char *format, va_list args)
 		}
 		else if (format[i] != '%')
 			count += ft_putchar(format[i]);
-		i++;
+		if (format[i])
+			i++;
 	}
 	return (count);
 }
