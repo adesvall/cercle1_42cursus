@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 16:38:27 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/08 19:45:49 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/09 15:06:32 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ int		flag_dot(const char *save, int start, t_flags *flags, va_list args)
 {
 	int i;
 
-	flags->zero = 0;
 	i = start;
 	i++;
 	if (save[i] == '*')
@@ -55,5 +54,9 @@ int		flag_dot(const char *save, int start, t_flags *flags, va_list args)
 		while (ft_is_in(save[i], "0123456789"))
 			flags->dot = (flags->dot * 10) + (save[i++] - '0');
 	}
+	if (flags->dot >= 0)
+		flags->zero = 0;
+	else
+		flags->dot = -1;	
 	return (i);
 }
