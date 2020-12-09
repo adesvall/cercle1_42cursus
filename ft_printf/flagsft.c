@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 16:38:27 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/09 15:11:00 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/09 15:30:13 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,6 @@ int		flag_dot(const char *save, int start, t_flags *flags, va_list args)
 	if (flags->dot >= 0)
 		flags->zero = 0;
 	else
-		flags->dot = -1;	
+		flags->dot = -1;
 	return (i);
 }
