@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/07 15:20:38 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/08 20:30:44 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/09 01:41:41 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int		main_display(char c, t_flags flags, va_list args)
 {
 	int count;
 
-	if (flags.zero == 1 && flags.dot == -1)
+	if (flags.zero == 1 && flags.dot == -1 && ft_is_in(c, "diuxXp"))
 	{
 		flags.dot = flags.width;
 		flags.width = 0;

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "ft_printf.h"
-#define ARGS "%.5p", a
+#define ARGS "%0000s", a
 
 int 	main()
 {
@@ -8,7 +8,7 @@ int 	main()
 	int b = 147483648;
 	int a1, a2, a3, a4;
 
-	a = 0;
+
 	//printf(ARGS);
 	ft_printf(ARGS);
 
