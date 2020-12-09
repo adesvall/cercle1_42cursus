@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/08 00:59:16 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/08 20:46:48 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/09 01:07:00 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int		disp_pointer(unsigned long long ptr, t_flags flags)
 	count = 0;
 	if (flags.minus == 1)
 		count += ft_putstrn("0x", 2) + ft_putull_base(ptr, "0123456789abcdef");
-	count += disp_width(flags.width, 14, 0);
+	count += disp_width(flags.width, ft_ulllen_base(ptr, "0123456789abcdef") + 2, 0);
 	if (flags.minus == 0)
 		count += ft_putstrn("0x", 2) + ft_putull_base(ptr, "0123456789abcdef");
 	return (count);

@@ -6,11 +6,23 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/20 13:52:40 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/08 00:52:42 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/09 01:13:09 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+int	ft_ulllen_base(unsigned long long i, char *base)
+{
+	unsigned int	lenbase;
+	int				count;
+
+	count = 0;
+	lenbase = ft_strnlen(base, -1);
+	if (i >= lenbase)
+		count += ft_ulllen_base((i / lenbase), base);
+	return (count + 1);
+}
 
 int	ft_strnlen(char *s, int n)
 {
