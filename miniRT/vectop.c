@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:51:54 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/13 23:22:59 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/14 00:07:00 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_vect	div(double n, t_vect v)
 
 double	dot(t_vect v1, t_vect v2)
 {
-	return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z / norm(v1) / norm(v2));
+	return ((v1.x * v2.x + v1.y * v2.y + v1.z * v2.z) / norm(v1) / norm(v2));
 }
 
 double	norm(t_vect v)

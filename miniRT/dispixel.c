@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:03:35 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/13 23:35:44 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/14 00:11:40 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	create_img(t_data img)
 	t_ray ray;
 	int value;
 	
-	lum = newvect(-100, 0, 100);
+	lum = newvect(-100, 0, 0);
 	sph.center = newvect(0, 0, 100);
 	sph.radius = 20;
 	ray.origin = newvect(0, 0, 0);
@@ -51,12 +51,12 @@ void	create_img(t_data img)
 				my_mlx_pixel_put(&img, j, i, create_trgb(0, 50, 50, 50));
 			else
 			{
-				value = 1000*dot(diff(col, sph.center), diff(lum, col)) / pow(norm(diff(lum, col)), 2);
+				value = 256*dot(diff(col, sph.center), diff(lum, col)); // pow(norm(diff(lum, col)), 2);
 				if (value < 0)
 					value = 0;
 				else if (value > 255)
 					value = 255;
-				my_mlx_pixel_put(&img, j, i, create_trgb(0, value, value, value));
+				my_mlx_pixel_put(&img, j, i, create_trgb(0, 0, value, value));
 			}
 			j++;
 		}
