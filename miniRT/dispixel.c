@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:03:35 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/14 00:11:40 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/15 05:45:20 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,29 +25,38 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
     *(unsigned int*)dst = color;
 }
 
-void	create_img(t_data img)
+void	create_img(t_data img, t_scene scene)
 {
 	int	i;
 	int	j;
-	t_vect col, lum;
-	t_sph sph;
+	t_sph	sph;
+	t_vect col, lum, camdir, up , right;
 	t_ray ray;
 	int value;
+	double fov = 100;
 	
-	lum = newvect(-100, 0, 0);
-	sph.center = newvect(0, 0, 100);
+	lum = newvect(100, 0, 1000);
+	sph.center = (t_vect){100, 0, 0};
 	sph.radius = 20;
+	scene.sph = &sph;
 	ray.origin = newvect(0, 0, 0);
+	camdir = normalize((t_vect){1, 0, 0});
+	
+	right = normalize((t_vect){-100*camdir.y/camdir.x, 100, 0});
+	up = normalize(prod_vect(right, camdir));
+
 	i=0;
-	while (i < img.resy)
+	while (i < scene.resH)
 	{
 		j=0;
-		while (j < img.resx)
+		while (j < scene.resW)
 		{
-			ray.dir = newvect(j - img.resx / 2, i - img.resy / 2, img.resx / 2 / tan(90/2));
-			ray.dir = div(norm(ray.dir), ray.dir);
+			ray.dir = normalize(sum(camdir, sum(mult(2.0*(j - scene.resW / 2)/scene.resW,right), mult(2.0*(i - scene.resH / 2)/scene.resW, up))));
+			//ray.dir = newvect(scene.resW / 2 / tan(90/2), j - scene.resW / 2, i - scene.resH / 2);
+			//ray.dir = turn_vect(ray.dir, atan2(ray.origin.y, ray.origin.x), atan2(ray.origin.z, norm((t_vect){ray.origin.x, ray.origin.y, 0})) + M_PI / 4);
+			//ray.dir = turn_vect(camdir, -(j - scene.resW / 2) * fov * M_PI / (180 * scene.resW), (i - scene.resH / 2) * fov * M_PI / (180 * scene.resW));
 			col = collision_sph(ray, sph);
-			if (col.x == ray.origin.x && col.y == ray.origin.y && col.x == ray.origin.x)
+			if (col.x == 0 && col.y == 0 && col.x == 0)
 				my_mlx_pixel_put(&img, j, i, create_trgb(0, 50, 50, 50));
 			else
 			{
