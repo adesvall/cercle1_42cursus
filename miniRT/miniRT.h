@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:40:00 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/15 03:44:12 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/15 20:23:19 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <mlx.h>
 # include <math.h>
 # include <fcntl.h>
+# include <stdlib.h>
 
 # ifndef M_PI
 #  define M_PI 3.14159265358979323846264338327950288419716939937510582
@@ -98,6 +99,7 @@ typedef struct	s_sph
 
 typedef struct	s_cam
 {
+	t_data	data;
 	t_vect	origin;
 	t_vect	dir;
 	double 	fov;
@@ -120,12 +122,18 @@ typedef struct	s_scene
 	t_tri	*tri;
 }				t_scene;
 
-void			create_img(t_data img, t_scene scene);
+
+void			init_scene(t_scene *scene);
+void			free_scene(t_scene scene);
+
+int				create_trgb(int t, int r, int g, int b);
+void			create_img(t_cam cam, t_data img, t_scene scene);
 t_vect			newvect(double x, double y, double z);
+int				egal_vect(t_vect v1, t_vect v2);
 t_vect			sum(t_vect v1, t_vect v2);
 t_vect			diff(t_vect v1, t_vect v2);
 t_vect			mult(double n, t_vect v);
-t_vect			div(double n, t_vect v);
+t_vect			divn(double n, t_vect v);
 double			dot(t_vect v1, t_vect v2);
 double			norm(t_vect v);
 t_vect			prod_vect(t_vect v1, t_vect v2);
@@ -133,7 +141,7 @@ t_vect			normalize(t_vect v);
 t_vect			turn_vect(t_vect dir0, double angw, double angh);
 
 
-
-t_vect			collision_sph(t_ray ray, t_sph sphere);
+int				find_col(t_ray ray, t_scene scene);
+double			collision_sph(t_ray ray, t_sph sphere);
 
 #endif

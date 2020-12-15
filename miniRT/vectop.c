@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:51:54 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/15 05:21:36 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/15 19:34:53 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ t_vect	newvect(double x, double y, double z)
 	res.y = y;
 	res.z = z;
 	return (res);
+}
+
+int		egal_vect(t_vect v1, t_vect v2)
+{
+	return (v1.x == v2.x && v1.y == v2.y && v1.z == v2.z);
 }
 
 t_vect	sum(t_vect v1, t_vect v2)
@@ -46,7 +51,7 @@ t_vect	mult(double n, t_vect v)
 	return (v);
 }
 
-t_vect	div(double n, t_vect v)
+t_vect	divn(double n, t_vect v)
 {
 	v.x /= n;
 	v.y /= n;
@@ -66,7 +71,7 @@ double	norm(t_vect v)
 
 t_vect	normalize(t_vect v)
 {
-	return (div(norm(v), v));
+	return (divn(norm(v), v));
 }
 
 t_vect	prod_vect(t_vect v1, t_vect v2)

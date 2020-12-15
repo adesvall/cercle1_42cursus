@@ -1,6 +1,6 @@
 NAME		= miniRT
 
-SRCS		= main.c vectop.c dispixel.c collision.c
+SRCS		= main.c vectop.c dispixel.c collision.c init_scene.c
 
 OBJS		= ${SRCS:.c=.o}
 
