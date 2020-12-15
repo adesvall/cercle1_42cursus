@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:03:35 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/15 05:45:20 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/15 06:06:51 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	create_img(t_data img, t_scene scene)
 	int value;
 	double fov = 100;
 	
-	lum = newvect(100, 0, 1000);
+	lum = newvect(0, -100, 0);
 	sph.center = (t_vect){100, 0, 0};
 	sph.radius = 20;
 	scene.sph = &sph;
@@ -60,12 +60,12 @@ void	create_img(t_data img, t_scene scene)
 				my_mlx_pixel_put(&img, j, i, create_trgb(0, 50, 50, 50));
 			else
 			{
-				value = 256*dot(diff(col, sph.center), diff(lum, col)); // pow(norm(diff(lum, col)), 2);
+				value = 150*dot(diff(col, sph.center), diff(lum, col))+50; // pow(norm(diff(lum, col)), 2);
 				if (value < 0)
 					value = 0;
 				else if (value > 255)
 					value = 255;
-				my_mlx_pixel_put(&img, j, i, create_trgb(0, 0, value, value));
+				my_mlx_pixel_put(&img, j, i, create_trgb(0, value, value, value));
 			}
 			j++;
 		}
