@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:31:37 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/16 02:36:34 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/17 00:12:22 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_col	get_color(t_vect coli, t_rescl res, t_scene scene)
 	t_vect	coef;
 	int		i;
 
+	normale = (t_vect){-1, 0, 0};
 	if (res.type == 's')
 	{
 		normale = normalize(diff(coli, scene.sph[res.i].center));
@@ -30,14 +31,17 @@ t_col	get_color(t_vect coli, t_rescl res, t_scene scene)
 		color = scene.pln[res.i].color;
 	}
 	i = 0;
-	coef = mult(scene.ambI, scene.ambCol);
+	coef = mult(scene.ambI/255, scene.ambCol);
 	if (scene.lum)
-		while (scene.lum[i].I)
+	{
+		while (scene.lum[i].I != 0)
 		{
-			coef = sum(coef, mult(scene.lum[i].I * normed_dot(normale, diff(scene.lum[i].pos, coli))*10 / pow(norm(diff(scene.lum[i].pos, coli)), 2), scene.lum[i].color));
+			if (collision_any((t_ray){coli, normalize(diff(scene.lum[i].pos, coli))}, scene, 0, norm(diff(scene.lum[i].pos, coli))).i == -1)
+				coef = sum(coef, mult(scene.lum[i].I/255 * normed_dot(normale, diff(scene.lum[i].pos, coli)) * 100000/ pow(norm(diff(scene.lum[i].pos, coli)), 2), scene.lum[i].color));
 			i++;
 		}
-	color = mult_col(50, coef, color);
+	}
+	color = mult_col(5, coef, color);/// pow(norm(diff(scene.lum[i].pos, coli)), 2)
 	return (color);
 }
 
@@ -48,9 +52,9 @@ int		find_col(t_ray ray, t_scene scene)
 	t_vect	closest;
 	t_rescl	res;
 
-	res = collision_any(ray, scene, &closest);
+	res = collision_any(ray, scene, &closest, -1);
 	if (res.i == -1)
-		color = (t_col){50, 50, 50};
+		color = (t_col){30, 30, 30};
 	else
 	{
 		color = get_color(closest, res, scene);
@@ -60,7 +64,7 @@ int		find_col(t_ray ray, t_scene scene)
 	return (create_trgb(0, color.r, color.g, color.b));
 }
 
-t_rescl		collision_any(t_ray ray, t_scene scene, t_vect *closest)
+t_rescl		collision_any(t_ray ray, t_scene scene, t_vect *closest, double dmax)
 {
 	int		i;
 	t_rescl	res;
@@ -68,26 +72,28 @@ t_rescl		collision_any(t_ray ray, t_scene scene, t_vect *closest)
 
 	res.i = -1;
 	res.type = 0;
-	if (i = collision_anysph(ray, scene, &col) >= 0)
+	if ((i = collision_anysph(ray, scene, &col)) >= 0)
 	{
 		best = col;
 		res.i = i;
 		res.type = 's';
 	}
-	if (i = collision_anypln(ray, scene, &col) >= 0 &&  norm(diff(ray.origin, col)) < norm(diff(ray.origin, *closest)))
+	if ((i = collision_anypln(ray, scene, &col)) >= 0 && (res.i == -1 || norm(diff(ray.origin, col)) < norm(diff(ray.origin, best))))
 	{
 		best = col;
 		res.i = i;
 		res.type = 'p';
 	}
-	if (closest)
+	if (dmax != -1 && norm(diff(best, ray.origin)) > dmax)
+		return ((t_rescl){0, -1});
+	if (res.i >= 0 && closest)
 		*closest = best;
 	return (res);
 }
 
 int		collision_anypln(t_ray ray, t_scene scene, t_vect *closest)
 {
-	t_vect	col;
+	t_vect	col, best;
 	int		resi;
 	int		i;
 	
@@ -98,39 +104,44 @@ int		collision_anypln(t_ray ray, t_scene scene, t_vect *closest)
 		while (scene.pln[i].exist)
 		{
 			if (collision_pln(ray, scene.pln[i], &col))
-				if (resi == -1 || norm(diff(col, ray.origin)) < norm(diff(*closest, ray.origin)))
+				if (resi == -1 || norm(diff(col, ray.origin)) < norm(diff(best, ray.origin)))
 				{
-					if (closest)
-						*closest = col;
+					best = col;
 					resi = i;					
 				}
 			i++;
 		}
+		if (resi >= 0 && closest)
+			*closest = best;
 	}
 	return (resi);
 }
 
 int		collision_anysph(t_ray ray, t_scene scene, t_vect *closest)
 {
-	t_vect	col;
+	t_vect	col, best;
 	int		resi;
 	int		i;
 	
 	resi = -1;
+	best = (t_vect){0, 0, 0};
 	if (scene.sph)
 	{
 		i = 0;
-		while (scene.sph[i].radius)
+		while (scene.sph[i].exist)
 		{
 			if (collision_sph(ray, scene.sph[i], &col))
-				if (norm(diff(col, ray.origin)) < norm(diff(*closest, ray.origin)) || resi == -1)
+			{
+				if (resi == -1 || (norm(diff(col, ray.origin)) < norm(diff(best, ray.origin))))
 				{
-					if (closest)
-						*closest = col;
-					resi = i;					
+					best = col;
+					resi = i;
 				}
+			}
 			i++;
 		}
+		if (resi >= 0 && closest)
+			*closest = best;
 	}
 	return (resi);
 }
@@ -143,7 +154,7 @@ int		collision_pln(t_ray ray, t_pln pln, t_vect *coli)
 	a = dot(ray.dir, pln.normale);
 	if (a > -EPSILON && a < EPSILON)
 		return (0);
-	dt = - dot(ray.origin, pln.normale) / a;
+	dt = - dot(diff(ray.origin, pln.origin), pln.normale) / a;
 	if (dt > EPSILON)
 	{
 		if (coli)
@@ -161,9 +172,11 @@ int		collision_sph(t_ray ray, t_sph sph, t_vect *coli)
 	b = 2 * (ray.dir.x * (ray.origin.x - sph.center.x) + ray.dir.y * (ray.origin.y - sph.center.y) + ray.dir.z * (ray.origin.z - sph.center.z));
 	c = pow(ray.origin.x - sph.center.x, 2) + pow(ray.origin.y - sph.center.y, 2) + pow(ray.origin.z - sph.center.z, 2) - pow(sph.radius, 2);
 	delta = pow(b, 2) - 4 * a * c;
-	if (delta >= 0)
+	if (delta > EPSILON)
 	{
 		res = -(b + sqrt(delta))/(2*a);
+		if (res <= EPSILON)
+			res = -b + sqrt(delta)/(2*a);
 		if (res > EPSILON)
 		{
 			if (coli)

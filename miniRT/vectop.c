@@ -6,13 +6,13 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:51:54 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/16 02:21:01 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/16 17:50:53 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-int	limit_color(double n)
+int		limit_color(double n)
 {
 	if (n > 255)
 		return (255);

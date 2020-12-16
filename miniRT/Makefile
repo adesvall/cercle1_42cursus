@@ -4,12 +4,12 @@ SRCS		= main.c vectop.c dispixel.c collision.c init_scene.c
 
 OBJS		= ${SRCS:.c=.o}
 
-CFLAGS		= -I/usr/include -Imlx_linux -O3
+CFLAGS		= -I/usr/include -Imlx_linux -O3 -g
 
 all:		${NAME}
 
 $(NAME):	${OBJS}
-			gcc -o ${NAME} ${OBJS} -L.. -lmlx -L/usr/lib -lXext -lX11 -lm -lbsd
+			gcc -o ${NAME} ${OBJS} -L.. -lmlx -L/usr/lib -lXext -lX11 -lm -lbsd -g
 
 .c.o:		
 			gcc ${CFLAGS} -c $< -o ${<:.c=.o}

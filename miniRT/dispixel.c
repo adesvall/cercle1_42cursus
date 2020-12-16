@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:03:35 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/16 02:39:17 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/16 23:53:58 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,15 @@ void	create_img(t_cam cam, t_data img, t_scene scene)
 {
 	int	i;
 	int	j;
-	t_vect up , right;
+	t_vect down, right;
 	int color;
 	t_ray ray;
 	double fov = cam.fov;
 
 	ray.origin = cam.origin;
 	cam.dir = normalize(cam.dir);
-	right = normalize((t_vect){-100*cam.dir.y/cam.dir.x, 100, 0});
-	up = normalize(prod_vect(right, cam.dir));
+	right = normalize((t_vect){100*cam.dir.y/cam.dir.x, -100, 0});
+	down = normalize(prod_vect(cam.dir, right));
 
 	i = 0;
 	while (i < scene.resH)
@@ -45,7 +45,7 @@ void	create_img(t_cam cam, t_data img, t_scene scene)
 		j = 0;
 		while (j < scene.resW)
 		{
-			ray.dir = normalize(sum(cam.dir, sum(mult(tan(fov * M_PI / 360) * (j - scene.resW / 2)/scene.resW,right), mult(tan(fov * M_PI / 360) * (i - scene.resH / 2)/scene.resW, up))));
+			ray.dir = normalize(sum(cam.dir, sum(mult(tan(fov * M_PI / 360) * (j - scene.resW / 2)/scene.resW, right), mult(tan(fov * M_PI / 360) * (i - scene.resH / 2)/scene.resW, down))));
 			//ray.dir = newvect(scene.resW / 2 / tan(90/2), j - scene.resW / 2, i - scene.resH / 2);
 			//ray.dir = turn_vect(ray.dir, atan2(ray.origin.y, ray.origin.x), atan2(ray.origin.z, norm((t_vect){ray.origin.x, ray.origin.y, 0})) + M_PI / 4);
 			//ray.dir = turn_vect(camdir, -(j - scene.resW / 2) * fov * M_PI / (180 * scene.resW), (i - scene.resH / 2) * fov * M_PI / (180 * scene.resW));

@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:40:00 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/16 02:13:53 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/17 00:06:09 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ typedef struct	s_sph
 	t_vect	center;
 	double	radius;
 	t_col	color;
+	int		exist;
 }				t_sph;
 
 typedef struct	s_cam
@@ -153,7 +154,7 @@ t_vect			turn_vect(t_vect dir0, double angw, double angh);
 
 
 int				find_col(t_ray ray, t_scene scene);
-t_rescl			collision_any(t_ray ray, t_scene scene, t_vect *closest);
+t_rescl			collision_any(t_ray ray, t_scene scene, t_vect *closest, double max);
 int				collision_anysph(t_ray ray, t_scene scene, t_vect *closest);
 int				collision_anypln(t_ray ray, t_scene scene, t_vect *closest);
 int				collision_sph(t_ray ray, t_sph sphere, t_vect *coli);
