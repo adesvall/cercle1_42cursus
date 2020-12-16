@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:40:00 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/15 20:23:19 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/16 02:13:53 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # ifndef M_PI
 #  define M_PI 3.14159265358979323846264338327950288419716939937510582
 # endif
+# define EPSILON 0.0000001
 
 
 typedef struct  s_data
@@ -39,6 +40,12 @@ typedef struct	s_vect
 	double	z;
 }				t_vect;
 
+typedef struct	s_rescl
+{
+	char	type;
+	int		i;
+}				t_rescl;
+
 typedef	struct	s_col
 {
 	int	r;
@@ -56,14 +63,15 @@ typedef struct	s_lum
 {
 	t_vect	pos;
 	double	I;
-	t_col	col;
+	t_vect	color;
 }				t_lum;
 
 typedef	struct	s_pln
 {
 	t_vect	origin;
 	t_vect	normale;
-	t_col	col;
+	t_col	color;
+	int		exist;
 }				t_pln;
 
 typedef struct	s_sqr
@@ -71,7 +79,7 @@ typedef struct	s_sqr
 	t_vect	origin;
 	t_vect	normale;
 	double	hauteur;
-	t_col	col;
+	t_col	color;
 }				t_sqr;
 
 typedef struct	s_cyl
@@ -80,6 +88,7 @@ typedef struct	s_cyl
 	t_vect	dir;
 	double	rayon;
 	double	length;
+	t_col	color;
 }				t_cyl;
 
 typedef struct	s_tri
@@ -87,7 +96,7 @@ typedef struct	s_tri
 	t_vect	p1;
 	t_vect	p2;
 	t_vect	p3;
-	t_col	col;
+	t_col	color;
 }				t_tri;
 
 typedef struct	s_sph
@@ -112,7 +121,7 @@ typedef struct	s_scene
 	int		resW;
 	int		resH;
 	double 	ambI;
-	t_col	ambCol;
+	t_vect	ambCol;
 	t_cam	*cam;
 	t_lum	*lum;
 	t_sph	*sph;
@@ -128,7 +137,8 @@ void			free_scene(t_scene scene);
 
 int				create_trgb(int t, int r, int g, int b);
 void			create_img(t_cam cam, t_data img, t_scene scene);
-t_vect			newvect(double x, double y, double z);
+
+t_col			mult_col(double n, t_vect coef, t_col color);
 int				egal_vect(t_vect v1, t_vect v2);
 t_vect			sum(t_vect v1, t_vect v2);
 t_vect			diff(t_vect v1, t_vect v2);
@@ -136,12 +146,17 @@ t_vect			mult(double n, t_vect v);
 t_vect			divn(double n, t_vect v);
 double			dot(t_vect v1, t_vect v2);
 double			norm(t_vect v);
+double			normed_dot(t_vect v1, t_vect v2);
 t_vect			prod_vect(t_vect v1, t_vect v2);
 t_vect			normalize(t_vect v);
 t_vect			turn_vect(t_vect dir0, double angw, double angh);
 
 
 int				find_col(t_ray ray, t_scene scene);
-double			collision_sph(t_ray ray, t_sph sphere);
+t_rescl			collision_any(t_ray ray, t_scene scene, t_vect *closest);
+int				collision_anysph(t_ray ray, t_scene scene, t_vect *closest);
+int				collision_anypln(t_ray ray, t_scene scene, t_vect *closest);
+int				collision_sph(t_ray ray, t_sph sphere, t_vect *coli);
+int				collision_pln(t_ray ray, t_pln pln, t_vect *coli);
 
 #endif
