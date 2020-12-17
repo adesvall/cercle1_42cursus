@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:40:00 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/17 00:06:09 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/17 02:59:00 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ typedef struct	s_tri
 
 typedef struct	s_sph
 {
+	int		(*intersect)();
 	t_vect	center;
 	double	radius;
 	t_col	color;
@@ -117,6 +118,8 @@ typedef struct	s_cam
 
 typedef struct	s_scene
 {
+	void    *mlx;
+    void    *mlx_win;
 	char	*line;
 	char	**split;
 	int		resW;
@@ -132,6 +135,14 @@ typedef struct	s_scene
 	t_tri	*tri;
 }				t_scene;
 
+typedef union	u_elmt
+{
+	t_sph	*sph;
+	t_pln	*pln;
+	t_sqr	*sqr;
+	t_cyl	*cyl;
+	t_tri	*tri;
+}				t_elmt;
 
 void			init_scene(t_scene *scene);
 void			free_scene(t_scene scene);
