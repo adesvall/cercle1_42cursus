@@ -6,11 +6,11 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:51:54 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/16 17:50:53 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/20 22:27:44 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
+#include "../miniRT.h"
 
 int		limit_color(double n)
 {
@@ -27,6 +27,16 @@ t_col	mult_col(double n, t_vect coef, t_col color)
 	color.g = limit_color(color.g * n * coef.y);
 	color.b = limit_color(color.b * n * coef.z);
 	return (color);
+}
+
+t_col	mixcolor(double reflect, t_col color, t_col reflectcol)
+{
+	t_col res;
+
+	res.r = (int)((1.0 - reflect) * color.r + reflect * reflectcol.r);
+	res.g = (int)((1.0 - reflect) * color.g + reflect * reflectcol.g);
+	res.b = (int)((1.0 - reflect) * color.b + reflect * reflectcol.b);
+	return (res);
 }
 
 int		egal_vect(t_vect v1, t_vect v2)
@@ -73,7 +83,7 @@ double	dot(t_vect v1, t_vect v2)
 
 double	norm(t_vect v)
 {
-	return (sqrt(pow(v.x, 2) + pow(v.y, 2) + pow(v.z, 2)));
+	return (sqrt(dot(v, v)));
 }
 
 double	normed_dot(t_vect v1, t_vect v2)

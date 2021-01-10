@@ -1,124 +1,167 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_scene.c                                       :+:      :+:    :+:   */
+/*   init_scn.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 19:13:40 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/17 02:16:15 by adesvall         ###   ########.fr       */
+/*   Updated: 2020/12/18 12:21:11 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
 /*
-void	check_id(t_scene *scene)
+void	check_id(t_scn *scn)
 {
-	if (ft_strequ(scene->split[0], "R") && !scene->resH && !scene->resW)
-		parse_res(scene);
-	else if (ft_strequ(scene->split[0], "A") && !scene->ambI)
-		parse_ambient(scene);
-	else if (ft_strequ(scene->split[0], "c"))
-		parse_camera(scene);
-	else if (ft_strequ(scene->split[0], "l"))
-		parse_light(scene);
-	else if (ft_strequ(scene->split[0], "sp"))
-		parse_sphere(scene);
-	else if (ft_strequ(scene->split[0], "pl"))
-		parse_plane(scene);
-	else if (ft_strequ(scene->split[0], "sq"))
-		parse_square(scene);
-	else if (ft_strequ(scene->split[0], "cy"))
-		parse_cylindre(scene);
-	else if (ft_strequ(scene->split[0], "tr"))
-		parse_triangle(scene);
-	else if (scene->split[0][0] == '#' || ft_strequ(scene->split[0], "#"))
+	if (ft_strequ(scn->split[0], "R") && !scn->resH && !scn->resW)
+		parse_res(scn);
+	else if (ft_strequ(scn->split[0], "A") && !scn->ambI)
+		parse_ambient(scn);
+	else if (ft_strequ(scn->split[0], "c"))
+		parse_camera(scn);
+	else if (ft_strequ(scn->split[0], "l"))
+		parse_light(scn);
+	else if (ft_strequ(scn->split[0], "sp"))
+		parse_sphere(scn);
+	else if (ft_strequ(scn->split[0], "pl"))
+		parse_plane(scn);
+	else if (ft_strequ(scn->split[0], "sq"))
+		parse_square(scn);
+	else if (ft_strequ(scn->split[0], "cy"))
+		parse_cylindre(scn);
+	else if (ft_strequ(scn->split[0], "tr"))
+		parse_triangle(scn);
+	else if (scn->split[0][0] == '#' || ft_strequ(scn->split[0], "#"))
 		;
-	else if (check_id_bonus(scene))
+	else if (check_id_bonus(scn))
 		;
 	else
-		handle_error("parsing error", scene);
+		handle_error("parsing error", scn);
 }
 
-void	parse_rt_file(char *rt_file, t_scene *scene)
+void	parse_rt_file(char *rt_file, t_scn *scn)
 {
 	int		fd;
 
 	if ((fd = open(rt_file, O_RDONLY)) < 0)
-		handle_error("fail to open scene file", scene);
-	while (get_next_line(fd, scene->line) > 0)
+		handle_error("fail to open scn file", scn);
+	while (get_next_line(fd, scn->line) > 0)
 	{
-		scene->split = ft_split(scene->line, " \t\v\n\r\f");
-		if (scene->split[0])
-			check_id(scene);
-		scene->split = free_split(scene->split);
-		free(scene->line);
+		scn->split = ft_split(scn->line, " \t\v\n\r\f");
+		if (scn->split[0])
+			check_id(scn);
+		scn->split = free_split(scn->split);
+		free(scn->line);
 	}
 	close(fd);
-	if (scene->cam == 0)
-		handle_error("no camera available", scene);
-	if (!scene->resH || !scene->resH)
-		handle_error("no resolution", scene);
+	if (scn->cam == 0)
+		handle_error("no camera available", scn);
+	if (!scn->resH || !scn->resH)
+		handle_error("no resolution", scn);
 }
 */
-void	init_scene(t_scene *scene)
+/*
+void	parse_file(int fd, t_scn *scn)
 {
-	scene->resW = 1920;
-	scene->resH = 1080;
-	scene->ambI = 0.05;
-	scene->ambCol = (t_vect){255, 255, 255};
+	char	*line;
+	int		res;
 
-	scene->cam = malloc(2 * sizeof(t_cam));
-	scene->cam[0].origin = (t_vect){-300, 0, 200};
-	scene->cam[0].dir = (t_vect){1, 0, -0.5};
-	scene->cam[0].fov = 90;
-	scene->cam[1].fov = 0;
-
-	scene->sph = malloc(4 * sizeof(t_sph));
-	scene->sph[0].center = (t_vect){100, -50, 0};
-	scene->sph[0].radius = 30;
-	scene->sph[0].color = (t_col){0, 140, 140};
-	scene->sph[0].exist = 1;
-	scene->sph[1].center = (t_vect){100, 50, 0};
-	scene->sph[1].radius = 30; //20
-	scene->sph[1].color = (t_col){140, 0, 140};
-	scene->sph[1].exist = 1;
-	scene->sph[2].center = (t_vect){100, -150, 0};
-	scene->sph[2].radius = 30; //20
-	scene->sph[2].color = (t_col){140, 140, 0};
-	scene->sph[2].exist = 1;
-	scene->sph[3].exist = 0;
-
-	scene->lum = malloc(3 * sizeof(t_lum));
-	scene->lum[0].pos = (t_vect){-200, -300, 100};
-	scene->lum[0].I = 0.3;
-	scene->lum[0].color = (t_vect){255, 255, 255};
-	scene->lum[1].pos = (t_vect){-600, 0, 0.01};
-	scene->lum[1].I = 0.3; //.3;
-	scene->lum[1].color = (t_vect){255, 255, 255};
-	scene->lum[2].I = 0;
-	
-	scene->pln = malloc(4 * sizeof(t_pln));
-	scene->pln[0].origin = (t_vect){0, 0, -30};
-	scene->pln[0].normale = (t_vect){0, 0, 1};
-	scene->pln[0].color = (t_col){72, 31, 10};
-	scene->pln[0].exist = 1;
-	scene->pln[1].origin = (t_vect){200, 0, 0};
-	scene->pln[1].normale = (t_vect){-1, 0, 0};
-	scene->pln[1].color = (t_col){172, 131, 110};
-	scene->pln[1].exist = 1;
-	scene->pln[2].origin = (t_vect){0, 150, 0};
-	scene->pln[2].normale = (t_vect){0, -1, 0};
-	scene->pln[2].color = (t_col){172, 131, 110};
-	scene->pln[2].exist = 1;
-	scene->pln[3].exist = 0;
+	while(get_next_line(fd, &line) == 1)
+	{
+		if (line[0] == 's')
+			res = add_sphere(line);
+		if (res != 0)
+			print_error(res);
+	}
 }
-
-void	free_scene(t_scene scene)
+*/
+void	init_scn(t_scn *scn)
 {
-	free(scene.cam);
-	free(scene.sph);
-	free(scene.pln);
-	free(scene.lum);
+	scn->resW = 1920;
+	scn->resH = 1080;
+	scn->ambI = 0.05;
+	scn->ambCol = (t_vect){255, 255, 255};
+
+	scn->cam = malloc(2 * sizeof(t_cam));
+	scn->cam[0].origin = (t_vect){-300, 0, 200};
+	scn->cam[0].dir = (t_vect){1, 0, -0.5};
+	scn->cam[0].fov = 90;
+	scn->cam[1].fov = 0;
+
+	scn->sph = malloc(3 * sizeof(t_sph));
+	scn->sph[0].center = (t_vect){100, -50, 50};
+	scn->sph[0].radius = 30;
+	scn->sph[0].color = (t_col){0, 140, 140};
+	scn->sph[0].reflect = 0.07;
+	scn->sph[0].exist = 1;
+	scn->sph[1].center = (t_vect){100, -150, 0};
+	scn->sph[1].radius = 30; //20
+	scn->sph[1].color = (t_col){140, 140, 0};
+	scn->sph[1].reflect = 0.07;
+	scn->sph[1].exist = 1;
+	scn->sph[2].exist = 0;
+
+	scn->lum = malloc(3 * sizeof(t_lum));
+	scn->lum[0].pos = (t_vect){-200, -300, 100};
+	scn->lum[0].I = 0.3;
+	scn->lum[0].color = (t_vect){255, 255, 255};
+	scn->lum[1].pos = (t_vect){-600, 0, 0.01};
+	scn->lum[1].I = 0; //.3;
+	scn->lum[1].color = (t_vect){255, 255, 255};
+	scn->lum[2].I = 0;
+	
+	scn->pln = malloc(4 * sizeof(t_pln));
+	scn->pln[0].origin = (t_vect){0, 0, -30};
+	scn->pln[0].normale = (t_vect){0, 0, 1};
+	scn->pln[0].color = (t_col){72, 31, 10};
+	scn->pln[0].reflect = 0.07;
+	scn->pln[0].exist = 1;
+	scn->pln[1].origin = (t_vect){200, 0, 0};
+	scn->pln[1].normale = (t_vect){-1, 0, 0};
+	scn->pln[1].color = (t_col){172, 131, 110};
+	scn->pln[1].reflect = 0.07;
+	scn->pln[1].exist = 1;
+	scn->pln[2].origin = (t_vect){0, 150, 0};
+	scn->pln[2].normale = (t_vect){0, -1, 0};
+	scn->pln[2].color = (t_col){172, 131, 110};
+	scn->pln[2].reflect = 0.07;
+	scn->pln[2].exist = 1;
+	scn->pln[3].exist = 0;
+
+	// scn->tri = malloc(2 * sizeof(t_cam));
+	// scn->tri[0].p1 = (t_vect){100, 0, 0};
+	// scn->tri[0].p2 = (t_vect){100, 0, 100};
+	// scn->tri[0].p3 = (t_vect){100, 50, 100};
+	// scn->tri[0].color = (t_col){240, 240, 240};
+	// scn->tri[0].exist = 1;
+	// scn->tri[1].exist = 0;
+	
+	scn->cyl = malloc(2 * sizeof(t_cam));
+	scn->cyl[0].origin = (t_vect){100, -50, 50};
+	scn->cyl[0].dir = (t_vect){0, -0.1, 1};
+	scn->cyl[0].length = 5;
+	scn->cyl[0].color = (t_col){50, 50, 99};
+	scn->cyl[0].radius = 50;
+	scn->cyl[0].reflect = 0.07;
+	scn->cyl[1].radius = 0;
+
+	scn->car = malloc(4 * sizeof(t_cam));
+	scn->car[0].origin = (t_vect){125, 50, 20};
+	scn->car[0].normale = normalize((t_vect){0, 0, 1});
+	scn->car[0].hauteur = 50;
+	scn->car[0].color = (t_col){200, 0, 10};
+	scn->car[0].reflect = 0.07;
+	scn->car[1].origin = (t_vect){100, 50, -5};
+	scn->car[1].normale = normalize((t_vect){1, 0, 0});
+	scn->car[1].hauteur = 50;
+	scn->car[1].color = (t_col){200, 0, 10};
+	scn->car[1].reflect = 0.07;
+	scn->car[2].origin = (t_vect){125, 25, -5};
+	scn->car[2].normale = normalize((t_vect){0, -1, 0});
+	scn->car[2].hauteur = 50;
+	scn->car[2].color = (t_col){200, 0, 10};
+	scn->car[2].reflect = 0.07;
+	scn->car[3].hauteur = 0;
 }
