@@ -6,11 +6,11 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:03:35 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/10 16:15:01 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/12 21:08:45 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
+#include "includes/miniRT.h"
 
 int		create_trgb(int t, int r, int g, int b)
 {
@@ -25,15 +25,14 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
     *(unsigned int*)dst = color;
 }
 
-void	create_img(t_cam cam, t_scn scn)
+void	create_img(t_cam cam, t_scn *scn)
 {
 	int	nthr;
 	pthread_t	t[4];
 	t_targs		arg[4];
 
-	cam.dir = normalize(cam.dir);
 	if (cam.dir.x == 0 && cam.dir.y == 0)
-		cam.right = normalize((t_vect){1, 0, 0});
+		cam.right = normalize((t_vect){0, -1, 0});
 	else
 		cam.right = normalize((t_vect){100*cam.dir.y, -100*cam.dir.x, 0});
 	cam.down = normalize(prod_vect(cam.dir, cam.right));
@@ -41,7 +40,7 @@ void	create_img(t_cam cam, t_scn scn)
 	nthr = 0;
 	while (nthr < 4)
 	{
-		arg[nthr] = (t_targs){nthr * scn.resH/4, cam, scn, 0};
+		arg[nthr] = (t_targs){nthr * scn->res.H/4, cam, scn, 2};
 		pthread_create(&t[nthr], NULL, (void*)find_col, &arg[nthr]);
 		nthr++;
 	}

@@ -6,13 +6,13 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 11:00:18 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/22 21:34:28 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/12 21:11:31 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../miniRT.h"
+#include "../includes/miniRT.h"
 
-int	in_square(t_vect col, t_car car)
+int	in_square(t_vect col, t_sqr car)
 {
 	double X, Y;
 	t_vect right, down, v;

@@ -6,32 +6,32 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:51:54 by adesvall          #+#    #+#             */
-/*   Updated: 2020/12/20 22:27:44 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/12 21:08:23 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../miniRT.h"
+#include "../includes/miniRT.h"
 
-int		limit_color(double n)
+double		limit_color(double n)
 {
 	if (n > 255)
 		return (255);
 	if (n < 0)
 		return (0);
-	return ((int)n);
+	return (n);
 }
 
-t_col	mult_col(double n, t_vect coef, t_col color)
+t_rgb	mult_col(double n, t_vect coef, t_rgb color)
 {
-	color.r = limit_color(color.r * n * coef.x);
-	color.g = limit_color(color.g * n * coef.y);
-	color.b = limit_color(color.b * n * coef.z);
+	color.r = (int)limit_color(color.r * n * coef.x);
+	color.g = (int)limit_color(color.g * n * coef.y);
+	color.b = (int)limit_color(color.b * n * coef.z);
 	return (color);
 }
 
-t_col	mixcolor(double reflect, t_col color, t_col reflectcol)
+t_rgb	mixcolor(double reflect, t_rgb color, t_rgb reflectcol)
 {
-	t_col res;
+	t_rgb res;
 
 	res.r = (int)((1.0 - reflect) * color.r + reflect * reflectcol.r);
 	res.g = (int)((1.0 - reflect) * color.g + reflect * reflectcol.g);
