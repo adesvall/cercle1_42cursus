@@ -6,11 +6,11 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 15:25:03 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/13 17:12:38 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/14 17:32:44 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/miniRT.h"
+#include "../../includes/miniRT.h"
 
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {

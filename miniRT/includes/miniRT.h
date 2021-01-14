@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:40:00 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/14 16:48:19 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/14 17:34:30 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "libftutils.h"
 # include "elems.h"
-# include "../get_next_line/get_next_line.h"
+# include "../srcs/get_next_line/get_next_line.h"
 # include "parse.h"
 # include <mlx.h>
 # include <X11/X.h>

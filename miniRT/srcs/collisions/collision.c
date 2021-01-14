@@ -6,11 +6,11 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:31:37 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/13 23:47:57 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/14 17:32:44 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/miniRT.h"
+#include "../../includes/miniRT.h"
 
 t_rgb	get_color(t_scn *scn, t_ray ray, int rfi)
 {

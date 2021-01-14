@@ -6,11 +6,11 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/10 16:10:37 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/14 17:05:35 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/14 17:32:44 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/miniRT.h"
+#include "../../includes/miniRT.h"
 
 void	ft_bzero(void *s, size_t n)
 {

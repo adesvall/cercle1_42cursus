@@ -7,7 +7,9 @@ SRCS		= main/main.c \
 			collisions/vectop.c main/create_img.c collisions/collision.c collisions/collisionany.c collisions/collisionutils.c \
 			parse/parse_file.c parse/parseutils.c main/events.c parse/add_elem.c main/save_bmp.c ${SLIB} ${SGNL}
 
-OBJS		= ${SRCS:.c=.o}
+SRCSS		= ${addprefix srcs/, ${SRCS}}
+
+OBJS		= ${SRCSS:.c=.o}
 
 CFLAGS		= -Wall -Wextra -I/includes -I/usr/include -Imlx_linux -lpthread -O3 -g
 
@@ -20,7 +22,7 @@ $(NAME):	${OBJS}
 			gcc ${CFLAGS} -c $< -o ${<:.c=.o}
 
 clean:
-			rm -f ${OBJS} ${OBJSBON}
+			rm -f ${OBJS}
 
 fclean:		clean
 			rm -f ${NAME}

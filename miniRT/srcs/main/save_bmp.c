@@ -6,12 +6,12 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:21:27 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/13 20:27:52 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/14 17:32:44 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-#include "../includes/miniRT.h"
+#include "../../includes/miniRT.h"
 
 unsigned char	*file_header_bmp(int filesize, t_scn *scn)
 {
