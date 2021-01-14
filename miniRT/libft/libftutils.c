@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/10 16:10:37 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/12 23:02:16 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/14 02:09:43 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_bzero(void *s, size_t n)
 		i++;
 	}
 }
-static int	ft_count(const char *s, char c)
+static int	ft_count(const char *s, char *c)
 {
 	int	i;
 	int	word;
@@ -36,31 +36,31 @@ static int	ft_count(const char *s, char c)
 		return (0);
 	while (s[i])
 	{
-		if (word == 0 && s[i] != c)
+		if (word == 0 && !ft_isin(s[i], c))
 		{
 			word = 1;
 			count++;
 		}
-		else if (s[i] == c)
+		else if (ft_isin(s[i], c))
 			word = 0;
 		i++;
 	}
 	return (count);
 }
 
-static char	*ft_strdup_chr(const char *str, char c)
+static char	*ft_strdup_chr(const char *str, char *c)
 {
 	int		i;
 	char	*res;
 
 	i = 0;
-	while (str[i] && str[i] != c)
+	while (str[i] && !ft_isin(str[i], c))
 		i++;
 	res = malloc((i + 1) * sizeof(char));
 	if (res == 0)
 		return (0);
 	i = 0;
-	while (str[i] && str[i] != c)
+	while (str[i] && !ft_isin(str[i], c))
 	{
 		res[i] = str[i];
 		i++;
@@ -83,7 +83,7 @@ char	**ft_abort(char **res)
 	return (0);
 }
 
-char		**ft_split(const char *s, char c)
+char		**ft_split(const char *s, char *c)
 {
 	char	**res;
 	int		i;
@@ -99,14 +99,14 @@ char		**ft_split(const char *s, char c)
 	count = 0;
 	while (s[i])
 	{
-		if (word == 0 && s[i] != c)
+		if (word == 0 && !ft_isin(s[i], c))
 		{
 			res[count] = ft_strdup_chr(&(s[i]), c);
 			if (res[count++] == 0)
 				return (ft_abort(res));
 			word = 1;
 		}
-		if (s[i++] == c)
+		if (ft_isin(s[i++], c))
 			word = 0;
 	}
 	res[count] = 0;

@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 15:48:52 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/12 21:14:40 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/14 02:07:01 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,9 @@ typedef struct s_list
 
 void			ft_bzero(void *s, size_t n);
 char			**ft_abort(char **res);
-char			**ft_split(const char *s, char c);
+char			**ft_split(const char *s, char *c);
 int				ft_strcmp(const char *s1, const char *s2);
+int				ft_isin(char c, const char *str);
 int				ft_atoi(const char *str);
 double			ft_atod(const char *str);
 int				ft_tablen(char **tab);

@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:31:37 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/12 21:32:42 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/13 23:47:57 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_rgb	get_color(t_scn *scn, t_ray ray, int rfi)
 
 	res = collision_any(ray, scn, &coli, -1);
 	if (res.elem == NULL)
-		return ((t_rgb){50, 50, 50});
+		return ((t_rgb){0, 0, 0});
 	color = res.color;
 	coef = mult(scn->ambI/255, scn->ambCol);
 	ite = scn->lums;
@@ -40,15 +40,15 @@ t_rgb	get_color(t_scn *scn, t_ray ray, int rfi)
 		ite = ite->next;
 	}
 	color = mult_col(5, coef, color);
-	if (res.reflect > EPSILON && rfi > 0)
+	if (REFLECT > EPSILON && rfi > 0)
 	{
 		ray = (t_ray){coli, normalize(sum(ray.dir, mult(-2 * dot(ray.dir, res.normale), res.normale)))};
-		color = mixcolor(res.reflect, color, get_color(scn, ray, rfi - 1));
+		color = mixcolor(REFLECT, color, get_color(scn, ray, rfi - 1));
 	}
 	return (color);
 }
 
-void		find_col(t_targs *args)
+void		fill_img(t_targs *args)
 {
 	t_rgb	color;
 	t_ray	ray;
@@ -56,20 +56,20 @@ void		find_col(t_targs *args)
 	int i;
 
 	i=0;
-	while (i + args->i < args->scn->res.H && i < args->scn->res.H/4)
+	//while (i + args->i < args->scn->res.H && i < args->scn->res.H/4)
+	while (i < args->scn->res.H)
 	{
 		j=0;
 		while (j < args->scn->res.W)
 		{
-			ray.dir = normalize(sum(args->cam.dir, sum(mult(tan(args->cam.fov * M_PI / 360) * (j - args->scn->res.W / 2)/args->scn->res.W, args->cam.right), mult(tan(args->cam.fov * M_PI / 360) * (i + args->i  - args->scn->res.H / 2)/args->scn->res.W, args->cam.down))));
-			ray.origin = args->cam.origin;
-			color = get_color(args->scn, ray, args->rfi);
-			my_mlx_pixel_put(&args->cam.data, j, i + args->i , create_trgb(0, color.r, color.g, color.b));
+			ray = find_ray(args->cam, i + args->i, j, args->scn);
+			color = get_color(args->scn, ray, R_DEPTH);
+			my_mlx_pixel_put(&args->cam->data, j, i + args->i , create_trgb(0, color.r, color.g, color.b));
 			j++;
 		}
 		i++;
 	}
-	pthread_exit(NULL);
+	//pthread_exit(NULL);
 }
 
 int		collision_pln(t_ray ray, void *elem, t_vect *coli)
@@ -119,26 +119,24 @@ int		collision_sph(t_ray ray, void *elem, t_vect *coli)
 
 int		collision_tri(t_ray ray, void *elem, t_vect *coli)
 {
-    t_vect	edge1, edge2, h, s, q;
+    t_vect	h, s, q;
     double	a,u,v,t;
 	t_tri	*tri;
 
 	tri = (t_tri*)elem;
-    edge1 = diff(tri->p[1], tri->p[0]);
-    edge2 = diff(tri->p[2], tri->p[0]);
-    h = prod_vect(ray.dir, edge2);
-    a = dot(edge1, h);
+    h = prod_vect(ray.dir, tri->p[1]);
+    a = dot(tri->p[0], h);
     if (a > -EPSILON && a < EPSILON)
         return (0);
-    s = diff(ray.origin, tri->p[0]);
+    s = diff(ray.origin, tri->origin);
     u = 1.0 / a * dot(s, h);
     if (u < 0.0 || u > 1.0)
         return (0);
-    q = prod_vect(s, edge1);
+    q = prod_vect(s, tri->p[0]);
     v = 1.0 / a * dot(ray.dir, q);
     if (v < 0 || u + v > 1.0)
         return (0);
-    t = 1.0 / a * dot(edge2, q);
+    t = 1.0 / a * dot(tri->p[1], q);
     if (t > EPSILON)
     {
         if (coli)

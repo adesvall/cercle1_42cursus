@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:40:00 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/12 21:33:45 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/14 01:41:06 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include "../get_next_line/get_next_line.h"
 # include "parse.h"
 # include <mlx.h>
+# include <X11/X.h>
+# include <X11/keysym.h>
 # include <math.h>
 # include <fcntl.h>
 # include <stdlib.h>
@@ -28,31 +30,44 @@
 # ifndef M_PI
 #  define M_PI 3.1415926535897932384626
 # endif
-# define EPSILON 0.0000001
+# define EPSILON 0.00001
 
-/*
-typedef union	u_elmt
-{
-	t_sph	*sph;
-	t_pln	*pln;
-	t_sqr	*sqr;
-	t_cyl	*cyl;
-	t_tri	*tri;
-}				t_elmt;
-*/
+# define OPEN_FAIL 1
+# define WINDOW_FAIL 2
+# define NO_RES 3
+# define NO_CAMERA 4
+# define WRONG_LINE 5
+# define WRONG_ARG 6
+# define MALLOC_FAIL 100
+
+# define REFLECT 0
+# define R_DEPTH 0
 
 void			init_scn(t_scn *scn);
 void			parse_file(char *rt_file, t_scn *scn);
 t_vect			tabto_vect(char **s);
 t_vect			tabto_lumrgb(char **s);
 t_rgb			tabto_rgb(char **s);
+int				create_trgb(int t, int r, int g, int b);
 
 int				exit_and_free(t_scn *scn);
 int				handle_error(char *msg, int err, t_scn *scn);
 int				get_keypress(int key, t_scn *scn);
+int				mouse_press(int button, int x, int y, t_scn *scn);
 
-int				create_trgb(int t, int r, int g, int b);
-void			create_img(t_cam cam, t_scn *scn);
+void			create_img(t_cam *cam, t_scn *scn);
+void			set_cam(t_cam *cam);
+t_ray			find_ray(t_cam *cam, int i, int j, t_scn *scn);
+
+void			fill_img(t_targs *args);
+t_rescl			collision_any(t_ray ray, t_scn *scn, t_vect *closest, double max);
+int				collision_sph(t_ray ray, void *elem, t_vect *coli);
+int				collision_pln(t_ray ray, void *elem, t_vect *coli);
+int				collision_tri(t_ray ray, void *elem, t_vect *coli);
+int				collision_cyl(t_ray ray, void *elem, t_vect *coli);
+int				collision_sqr(t_ray ray, void *elem, t_vect *coli);
+int				in_square(t_vect coli, t_sqr car);
+
 
 void			my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void			save_bmp(const char *filename, const unsigned char *data, t_scn *scn);
@@ -62,6 +77,7 @@ t_rgb			mult_col(double n, t_vect coef, t_rgb color);
 t_rgb			mixcolor(double reflect, t_rgb color, t_rgb reflectcol);
 int				egal_vect(t_vect v1, t_vect v2);
 t_vect			sum(t_vect v1, t_vect v2);
+void			translate(t_vect *v, double x, double y, double z);
 t_vect			diff(t_vect v1, t_vect v2);
 t_vect			mult(double n, t_vect v);
 t_vect			divn(double n, t_vect v);
@@ -71,16 +87,5 @@ double			normed_dot(t_vect v1, t_vect v2);
 t_vect			prod_vect(t_vect v1, t_vect v2);
 t_vect			normalize(t_vect v);
 t_vect			turn_vect(t_vect dir0, double angw, double angh);
-
-
-void			find_col(t_targs *args);
-t_rescl			collision_any(t_ray ray, t_scn *scn, t_vect *closest, double max);
-int				collision_sph(t_ray ray, void *elem, t_vect *coli);
-int				collision_pln(t_ray ray, void *elem, t_vect *coli);
-int				collision_tri(t_ray ray, void *elem, t_vect *coli);
-int				collision_cyl(t_ray ray, void *elem, t_vect *coli);
-int				collision_sqr(t_ray ray, void *elem, t_vect *coli);
-int				in_square(t_vect coli, t_sqr car);
-
 
 #endif

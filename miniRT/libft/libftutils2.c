@@ -6,13 +6,13 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/10 17:10:42 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/12 22:42:59 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/14 02:11:02 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/miniRT.h"
 
-int	ft_tablen(char **tab)
+int		ft_tablen(char **tab)
 {
 	int	i;
 
@@ -22,7 +22,7 @@ int	ft_tablen(char **tab)
 	return (i);
 }
 
-int	ft_strcmp(const char *s1, const char *s2)
+int		ft_strcmp(const char *s1, const char *s2)
 {
 	int i;
 
@@ -32,7 +32,7 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return (((unsigned char*)s1)[i] - ((unsigned char*)s2)[i]);
 }
 
-static	int	ft_isin(char c, const char *str)
+int		ft_isin(char c, const char *str)
 {
 	int i;
 
@@ -48,7 +48,7 @@ static	int	ft_isin(char c, const char *str)
 	return (0);
 }
 
-int			ft_atoi(const char *str)
+int		ft_atoi(const char *str)
 {
 	int	res;
 	int	i;
@@ -74,7 +74,7 @@ int			ft_atoi(const char *str)
 	return (res * sign);
 }
 
-double		getsign(const char *str)
+double	getsign(const char *str)
 {
 	int	i;
 	
@@ -86,7 +86,7 @@ double		getsign(const char *str)
 	return (1);
 }
 
-double		ft_atod(const char *str)
+double	ft_atod(const char *str)
 {
 	double	res;
 	int		afterdot;

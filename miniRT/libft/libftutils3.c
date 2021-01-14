@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 15:25:03 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/12 21:10:55 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/13 17:12:38 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,10 @@ void	ft_lstclear(t_list **lst, void (*del)(void*))
 	cur = *lst;
 	while (cur)
 	{
-		*lst = (*lst)->next;
+		*lst = cur->next;
 		ft_lstdelone(cur, del);
 		cur = *lst;
 	}
-	lst = 0;
 }
 
 void	ft_lstadd_front(t_list **alst, t_list *new)

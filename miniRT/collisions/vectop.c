@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:51:54 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/12 21:08:23 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/13 23:54:14 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ t_rgb	mixcolor(double reflect, t_rgb color, t_rgb reflectcol)
 {
 	t_rgb res;
 
-	res.r = (int)((1.0 - reflect) * color.r + reflect * reflectcol.r);
-	res.g = (int)((1.0 - reflect) * color.g + reflect * reflectcol.g);
-	res.b = (int)((1.0 - reflect) * color.b + reflect * reflectcol.b);
+	res.r = (int)limit_color(color.r + reflect * reflectcol.r);
+	res.g = (int)limit_color(color.g + reflect * reflectcol.g);
+	res.b = (int)limit_color(color.b + reflect * reflectcol.b);
 	return (res);
 }
 
@@ -50,6 +50,13 @@ t_vect	sum(t_vect v1, t_vect v2)
 	v1.y += v2.y;
 	v1.z += v2.z;
 	return (v1);
+}
+
+void	translate(t_vect *v, double x, double y, double z)
+{
+	v->x += x;
+	v->y += y;
+	v->z += z;
 }
 
 t_vect	diff(t_vect v1, t_vect v2)
@@ -110,8 +117,11 @@ t_vect	turn_vect(t_vect dir0, double angw, double angh)
 {
 	t_vect	tmp, res, axe;
 
-	tmp = (t_vect){cos(angw) * dir0.x - sin(angw) * dir0.y, sin(angw) * dir0.x + cos(angw) * dir0.y, dir0.z};
+	tmp = (t_vect){cos(angw) * dir0.x - sin(angw) * dir0.y,
+					sin(angw) * dir0.x + cos(angw) * dir0.y, dir0.z};
 	res = mult(cos(angh), tmp);
-	axe = normalize((t_vect){-tmp.y, tmp.x, 0});
-	return (normalize(sum(res, mult(sin(angh), prod_vect(axe, tmp)))));
+	axe = (t_vect){-tmp.y, tmp.x, 0};
+	if (norm(axe) == 0)
+		return tmp;
+	return (normalize(sum(res, mult(sin(angh), prod_vect(normalize(axe), tmp)))));
 }
