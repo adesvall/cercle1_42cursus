@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:01:38 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/14 02:43:15 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/14 16:48:57 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	create_window(t_scn *scn)
 	if (!(scn->mlx_win = mlx_new_window(scn->mlx, scn->res.W, scn->res.H, "miniRT")))
 		handle_error("Fail to create Minilibx window", WINDOW_FAIL, scn);
 	scn->actualcam = scn->cams;
+	scn->actuallum = scn->lums;
 	scn->sl_obj.pos = &((t_cam*)scn->actualcam->content)->origin;
 	scn->sl_obj.dir = &((t_cam*)scn->actualcam->content)->dir;
 	printf("The actual Camera is selected.\n");
@@ -67,11 +68,12 @@ int		main(int argc, char **argv)
 		exit(1);
 	}
 	ft_bzero(&scn, sizeof(t_scn));
-    parse_file(argv[1], &scn);
+    scn.filename = argv[1];
+	parse_file(&scn);
     scn.mlx = mlx_init();
 	printf("\033[0;32mRendering miniRT...\n\033[0m");
     create_all_img(&scn);
-	if (argc == 3 && ft_strcmp(argv[2], "-save") == 0)
+	if (argc == 3 && !ft_strcmp(argv[2], "-save"))
 	{
 		printf("Saving to save.bmp ..\n");
 		save_bmp("save.bmp", (unsigned char*)((t_cam*)scn.actualcam->content)->data.addr, &scn);

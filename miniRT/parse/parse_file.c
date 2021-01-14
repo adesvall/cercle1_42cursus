@@ -63,7 +63,7 @@ void	parse_rt_file(char *rt_file, t_scn *scn)
 }
 */
 
-void	parse_file(char *rt_file, t_scn *scn)
+void	parse_file(t_scn *scn)
 {
 	char	*line;
 	char	**split;
@@ -71,7 +71,7 @@ void	parse_file(char *rt_file, t_scn *scn)
 	int		gnl;
 	int		fd;
 	
-	if ((fd = open(rt_file, O_RDONLY)) < 0)
+	if ((fd = open(scn->filename, O_RDONLY)) < 0)
 		handle_error("fail to open .rt file", OPEN_FAIL, scn);
 	gnl = 1;
 	while (gnl == 1)

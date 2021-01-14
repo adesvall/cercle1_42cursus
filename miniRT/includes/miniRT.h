@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:40:00 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/14 01:41:06 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/14 16:48:19 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@
 # define R_DEPTH 0
 
 void			init_scn(t_scn *scn);
-void			parse_file(char *rt_file, t_scn *scn);
+void			parse_file(t_scn *scn);
 t_vect			tabto_vect(char **s);
 t_vect			tabto_lumrgb(char **s);
 t_rgb			tabto_rgb(char **s);
@@ -55,6 +55,7 @@ int				handle_error(char *msg, int err, t_scn *scn);
 int				get_keypress(int key, t_scn *scn);
 int				mouse_press(int button, int x, int y, t_scn *scn);
 
+void			create_all_img(t_scn *scn);
 void			create_img(t_cam *cam, t_scn *scn);
 void			set_cam(t_cam *cam);
 t_ray			find_ray(t_cam *cam, int i, int j, t_scn *scn);
