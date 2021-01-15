@@ -6,24 +6,28 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/04 13:36:56 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/14 17:32:44 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/15 04:07:54 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/miniRT.h"
+#include "miniRT.h"
 
 int		set_res(char **split, t_scn *scn)
 {
+	if (ft_tablen(split) != 3 || scn->res.H != 0)
+		return (WRONG_LINE);
 	scn->res.W = ft_atoi(split[1]);
 	scn->res.H = ft_atoi(split[2]);
+	if (scn->res.W < 1 || scn->res.H < 1)
+		return (WRONG_LINE);
 	return (0);
 }
 
-int		set_ambLum(char **split, t_scn *scn)
+int		set_amblum(char **split, t_scn *scn)
 {
 	char **splitcol;
 
-	if (ft_tablen(split) != 3)
+	if (ft_tablen(split) != 3 || scn->ambI != 0)
 		return (WRONG_LINE);
 	scn->ambI = ft_atod(split[1]);
 	if (scn->ambI < 0 || scn->ambI > 1)
@@ -39,7 +43,7 @@ int		set_ambLum(char **split, t_scn *scn)
 	return (0);
 }
 
-int 	add_cam(char **split, t_scn *scn)
+int		add_cam(char **split, t_scn *scn)
 {
 	char	**spos;
 	char 	**sdir;
@@ -49,31 +53,22 @@ int 	add_cam(char **split, t_scn *scn)
 		return (WRONG_LINE);
 	if (!(cam = malloc(sizeof(t_cam))))
 		handle_error("Malloc failed", MALLOC_FAIL, scn);
+	ft_lstadd_front(&(scn->cams), ft_lstnew(cam));
 	spos = ft_split(split[1], ",");
-	if (ft_tablen(spos) != 3)
+	sdir = ft_split(split[2], ",");
+	if (ft_tablen(spos) != 3 || ft_tablen(sdir) != 3)
 	{
 		ft_abort(spos);
-		free(cam);
+		ft_abort(sdir);
 		return (WRONG_ARG);
 	}
 	cam->origin = tabto_vect(spos);
-	ft_abort(spos);
-	sdir = ft_split(split[2], ",");
-	if (ft_tablen(sdir) != 3)
-	{
-		ft_abort(sdir);
-		free(cam);
-		return (WRONG_ARG);
-	}
 	cam->dir = tabto_vect(sdir);
+	ft_abort(spos);
 	ft_abort(sdir);
-	if (norm(cam->dir) < EPSILON)
-	{
-		free(cam);
-		return (WRONG_ARG);
-	}
 	cam->fov = ft_atod(split[3]);
-	ft_lstadd_front(&(scn->cams), ft_lstnew(cam));
+	if (norm(cam->dir) < EPSILON || cam->fov < EPSILON || cam->fov >= 180 - EPSILON)
+		return (WRONG_ARG);
 	return (0);
 }
 
@@ -88,23 +83,18 @@ int 	add_lum(char **split, t_scn *scn)
 	if (!(lum = malloc(sizeof(t_lum))))
 		handle_error("Malloc failed", MALLOC_FAIL, scn);
 	spos = ft_split(split[1], ",");
-	if (ft_tablen(spos) != 3)
+	lum->I = ft_atod(split[2]);
+	srgb = ft_split(split[3], ",");
+	if (ft_tablen(srgb) != 3 || ft_tablen(spos) != 3)
 	{
 		ft_abort(spos);
+		ft_abort(srgb);
 		free(lum);
 		return (WRONG_ARG);
 	}
 	lum->pos = tabto_vect(spos);
-	ft_abort(spos);
-	lum->I = ft_atod(split[2]);
-	srgb = ft_split(split[3], ",");
-	if (ft_tablen(srgb) != 3)
-	{
-		free(lum);
-		ft_abort(srgb);
-		return (WRONG_ARG);
-	}
 	lum->color = tabto_lumrgb(srgb);
+	ft_abort(spos);
 	ft_abort(srgb);
 	ft_lstadd_front(&(scn->lums), ft_lstnew(lum));
 	return (0);
@@ -150,31 +140,21 @@ int 	add_pln(char **split, t_scn *scn)
 	if (!(pln = malloc(sizeof(t_pln))))
 		handle_error("Malloc failed", MALLOC_FAIL, scn);
 	spos = ft_split(split[1], ",");
-	if (ft_tablen(spos) != 3)
-	{
-		free(pln);
-		ft_abort(spos);
-		return (WRONG_ARG);
-	}
-	pln->origin = tabto_vect(spos);
-	ft_abort(spos);
 	sdir = ft_split(split[2], ",");
-	if (ft_tablen(sdir) != 3)
-	{
-		ft_abort(sdir);
-		free(pln);
-		return (WRONG_ARG);
-	}
-	pln->normale = normalize(tabto_vect(sdir));
-	ft_abort(sdir);
 	srgb = ft_split(split[3], ",");
-	if (ft_tablen(srgb) != 3)
+	if (ft_tablen(srgb) != 3 || ft_tablen(spos) != 3 || ft_tablen(sdir) != 3)
 	{
+		ft_abort(spos);
+		ft_abort(sdir);
 		ft_abort(srgb);
 		free(pln);
 		return (WRONG_ARG);
 	}
+	pln->origin = tabto_vect(spos);
+	pln->normale = normalize(tabto_vect(sdir));
 	pln->color = tabto_rgb(srgb);
+	ft_abort(spos);
+	ft_abort(sdir);
 	ft_abort(srgb);
 	ft_lstadd_front(&(scn->plns), ft_lstnew(pln));
 	return (0);
@@ -223,7 +203,37 @@ int 	add_sqr(char **split, t_scn *scn)
 	return (0);
 }
 
-int 	add_cyl(char **split, t_scn *scn)
+void 	add_caps(t_cyl *cyl, t_scn *scn, int caps)
+{
+	t_dsk	*dsk1;
+	t_dsk	*dsk2;
+	
+	if (!caps)
+	{
+		cyl->dsks[0] = NULL;
+		return ;
+	}
+	if (!(dsk1 = malloc(sizeof(t_dsk))))
+		handle_error("Malloc failed", MALLOC_FAIL, scn);
+	if (!(dsk2 = malloc(sizeof(t_dsk))))
+	{
+		free(dsk1);
+		handle_error("Malloc failed", MALLOC_FAIL, scn);
+	}
+	dsk1->color = cyl->color;
+	dsk1->radius = cyl->radius;
+	dsk2->color = cyl->color;
+	dsk2->radius = cyl->radius;
+	set_caps(cyl, dsk1, dsk2);
+	dsk1->cyl = cyl;
+	dsk2->cyl = cyl;
+	cyl->dsks[0] = dsk1;
+	cyl->dsks[1] = dsk2;
+	ft_lstadd_front(&(scn->dsks), ft_lstnew(dsk1));
+	ft_lstadd_front(&(scn->dsks), ft_lstnew(dsk2));
+}
+
+int 	add_cyl(char **split, t_scn *scn, int caps)
 {
 	char	**spos;
 	char	**sdir;
@@ -234,36 +244,31 @@ int 	add_cyl(char **split, t_scn *scn)
 		return (WRONG_LINE);
 	if (!(cyl = malloc(sizeof(t_cyl))))
 		handle_error("Malloc failed", MALLOC_FAIL, scn);
+	ft_lstadd_front(&(scn->cyls), ft_lstnew(cyl));
 	spos = ft_split(split[1], ",");
-	if (ft_tablen(spos) != 3)
-	{
-		ft_abort(spos);
-		free(cyl);
-		return (WRONG_ARG);
-	}
-	cyl->origin = tabto_vect(spos);
-	ft_abort(spos);
 	sdir = ft_split(split[2], ",");
-	if (ft_tablen(sdir) != 3)
-	{
-		ft_abort(sdir);
-		free(cyl);
-		return (WRONG_ARG);
-	}
-	cyl->dir = normalize(tabto_vect(sdir));
-	ft_abort(sdir);
+	srgb = ft_split(split[5], ",");
 	cyl->radius = ft_atod(split[3]) / 2;
 	cyl->length = ft_atod(split[4]);
-	srgb = ft_split(split[5], ",");
-	if (ft_tablen(srgb) != 3)
+	if (ft_tablen(spos) != 3 || ft_tablen(sdir) != 3 || ft_tablen(srgb) != 3
+							|| cyl->radius < EPSILON || cyl->length < EPSILON)
 	{
+		ft_abort(spos);
+		ft_abort(sdir);
 		ft_abort(srgb);
 		free(cyl);
 		return (WRONG_ARG);
 	}
+	cyl->origin = tabto_vect(spos);
+	cyl->dir = tabto_vect(sdir);
 	cyl->color = tabto_rgb(srgb);
+	ft_abort(spos);
+	ft_abort(sdir);
 	ft_abort(srgb);
-	ft_lstadd_front(&(scn->cyls), ft_lstnew(cyl));
+	if (norm(cyl->dir) < EPSILON)
+		return (WRONG_ARG);
+	cyl->dir = normalize(cyl->dir);
+	add_caps(cyl, scn, caps);
 	return (0);
 }
 

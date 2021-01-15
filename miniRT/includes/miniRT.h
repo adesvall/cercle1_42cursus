@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:40:00 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/14 17:34:30 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/15 02:42:33 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,10 @@ int				collision_sph(t_ray ray, void *elem, t_vect *coli);
 int				collision_pln(t_ray ray, void *elem, t_vect *coli);
 int				collision_tri(t_ray ray, void *elem, t_vect *coli);
 int				collision_cyl(t_ray ray, void *elem, t_vect *coli);
+int				collision_dsk(t_ray ray, void *elem, t_vect *coli);
 int				collision_sqr(t_ray ray, void *elem, t_vect *coli);
 int				in_square(t_vect coli, t_sqr car);
+t_abc			abc_solve(double a, double b, double c);
 
 
 void			my_mlx_pixel_put(t_data *data, int x, int y, int color);

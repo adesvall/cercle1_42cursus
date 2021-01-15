@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:55:11 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/14 17:32:44 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/15 03:02:35 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,12 @@ t_rgb	tabto_rgb(char **s)
 	v.g = (int)limit_color(ft_atod(s[1]));
 	v.b = (int)limit_color(ft_atod(s[2]));
 	return (v);
+}
+
+void	set_caps(t_cyl *cyl, t_dsk *dsk1, t_dsk *dsk2)
+{
+	dsk1->origin = sum(cyl->origin, mult(cyl->length / 2, cyl->dir));
+	dsk2->origin = sum(cyl->origin, mult(-cyl->length / 2, cyl->dir));
+	dsk1->normale = cyl->dir;
+	dsk2->normale = cyl->dir;
 }

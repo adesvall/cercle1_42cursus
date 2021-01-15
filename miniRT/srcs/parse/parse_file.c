@@ -87,7 +87,7 @@ void	parse_file(t_scn *scn)
 		if (strcmp(split[0], "R") == 0)
 			res = set_res(split, scn);
 		else if (strcmp(split[0], "A") == 0)
-			res = set_ambLum(split, scn);
+			res = set_amblum(split, scn);
 		else if (strcmp(split[0], "c") == 0)
 			res = add_cam(split, scn);
 		else if (strcmp(split[0], "l") == 0)
@@ -99,7 +99,9 @@ void	parse_file(t_scn *scn)
 		else if (strcmp(split[0], "sq") == 0)
 			res = add_sqr(split, scn);
 		else if (strcmp(split[0], "cy") == 0)
-			res = add_cyl(split, scn);
+			res = add_cyl(split, scn, 0);
+		else if (strcmp(split[0], "cyc") == 0)
+			res = add_cyl(split, scn, 1);
 		else if (strcmp(split[0], "tr") == 0)
 			res = add_tri(split, scn);
 		if (res != 0)

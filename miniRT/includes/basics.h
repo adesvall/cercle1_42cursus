@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 21:04:45 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/13 23:38:22 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/15 02:00:04 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,13 @@ typedef struct	s_couple
 	int	W;
 	int	H;
 }				t_couple;
+
+typedef struct	s_abc
+{
+	double	x1;
+	double	x2_x1;
+	double	delta;
+}				t_abc;
 
 typedef	struct	s_rgb
 {

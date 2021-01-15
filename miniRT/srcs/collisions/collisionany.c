@@ -6,11 +6,11 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/17 23:27:39 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/14 17:32:44 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/15 02:45:26 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/miniRT.h"
+#include "miniRT.h"
 
 
 void	*collision_list_elem(t_ray ray, t_list *elem, t_vect *closest, int (*collision) (t_ray ray, void *elem, t_vect *coli))
@@ -87,6 +87,16 @@ t_rescl		collision_any(t_ray ray, t_scn *scn, t_vect *closest, double dmax)
 		res.color = ((t_cyl*)elem)->color;
 		res.pos = &((t_cyl*)elem)->origin;
 		res.dir = &((t_cyl*)elem)->dir;
+	}
+	if ((elem = collision_list_elem(ray, scn->dsks, &col, &collision_dsk)) != NULL && (res.elem == NULL || norm(diff(ray.origin, col)) < norm(diff(ray.origin, best))))
+	{
+		best = col;
+		res.elem = elem;
+		res.type = "Cylinder (Disk)";
+		res.normale = ((t_dsk*)elem)->normale;
+		res.color = ((t_dsk*)elem)->color;
+		res.pos = &((t_dsk*)elem)->origin;
+		res.dir = &((t_dsk*)elem)->normale;
 	}
 	if ((elem = collision_list_elem(ray, scn->sqrs, &col, &collision_sqr)) != NULL && (res.elem == NULL || norm(diff(ray.origin, col)) < norm(diff(ray.origin, best))))
 	{
