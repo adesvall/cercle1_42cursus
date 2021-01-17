@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 21:15:50 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/15 03:58:54 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/15 17:42:54 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,7 @@ int 	add_pln(char **split, t_scn *scn);
 int 	add_sqr(char **split, t_scn *scn);
 int 	add_cyl(char **split, t_scn *scn , int caps);
 int 	add_tri(char **split, t_scn *scn);
+int		add_cub(char **split, t_scn *scn);
+void	set_faces(t_cub *cub, t_sqr *sqrs[6]);
 
 #endif

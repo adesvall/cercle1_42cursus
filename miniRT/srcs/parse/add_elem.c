@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/04 13:36:56 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/15 04:07:54 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/15 18:57:50 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,17 @@
 
 int		set_res(char **split, t_scn *scn)
 {
-	if (ft_tablen(split) != 3 || scn->res.H != 0)
+	int	newW;
+	int	newH;
+	
+	if (ft_tablen(split) != 3)
 		return (WRONG_LINE);
-	scn->res.W = ft_atoi(split[1]);
-	scn->res.H = ft_atoi(split[2]);
+	newW = ft_atoi(split[1]);
+	newH = ft_atoi(split[2]);
+	if (scn->res.H != 0 && (newW != scn->res.W || newH != scn->res.H))
+		return (WRONG_LINE);
+	scn->res.W = newW;
+	scn->res.H = newH;
 	if (scn->res.W < 1 || scn->res.H < 1)
 		return (WRONG_LINE);
 	return (0);
@@ -171,35 +178,68 @@ int 	add_sqr(char **split, t_scn *scn)
 		return (WRONG_LINE);
 	if (!(sqr = malloc(sizeof(t_sqr))))
 		handle_error("Malloc failed", MALLOC_FAIL, scn);
+	ft_lstadd_front(&(scn->sqrs), ft_lstnew(sqr));
 	spos = ft_split(split[1], ",");
-	if (ft_tablen(spos) != 3)
+	sdir = ft_split(split[2], ",");
+	sqr->side = ft_atod(split[3]);
+	srgb = ft_split(split[4], ",");
+	if (ft_tablen(spos) != 3 || ft_tablen(sdir) != 3 || ft_tablen(srgb) != 3 || sqr->side < EPSILON)
 	{
 		ft_abort(spos);
-		free(sqr);
+		ft_abort(sdir);
+		ft_abort(srgb);
 		return (WRONG_ARG);
 	}
 	sqr->origin = tabto_vect(spos);
-	ft_abort(spos);
-	sdir = ft_split(split[2], ",");
-	if (ft_tablen(sdir) != 3)
-	{
-		ft_abort(sdir);
-		free(sqr);
-		return (WRONG_ARG);
-	}
 	sqr->normale = normalize(tabto_vect(sdir));
-	ft_abort(sdir);
-	sqr->hauteur = ft_atod(split[3]);
-	srgb = ft_split(split[4], ",");
-	if (ft_tablen(srgb) != 3)
-	{
-		ft_abort(srgb);
-		free(sqr);
-		return (WRONG_ARG);
-	}
 	sqr->color = tabto_rgb(srgb);
 	ft_abort(srgb);
-	ft_lstadd_front(&(scn->sqrs), ft_lstnew(sqr));
+	ft_abort(sdir);
+	ft_abort(spos);
+	set_sqr(sqr);
+	return (0);
+}
+
+int		add_cub(char **split, t_scn *scn)
+{
+	char	**spos;
+	char	**sdir;
+	char 	**srgb;
+	t_cub	*cub;
+	int		i;
+	
+	if (!(cub = malloc(sizeof(t_cub))))
+		handle_error("Malloc failed", MALLOC_FAIL, scn);
+	ft_lstadd_front(&(scn->cubs), ft_lstnew(cub));
+	i = 0;
+	while (i < 6)
+	{
+		if (!(cub->sqrs[i] = malloc(sizeof(t_sqr))))
+			handle_error("Malloc failed", MALLOC_FAIL, scn);
+		ft_lstadd_front(&(scn->sqrs), ft_lstnew(cub->sqrs[i]));
+		i++;
+	}
+	spos = ft_split(split[1], ",");
+	sdir = ft_split(split[2], ",");
+	cub->side = ft_atod(split[3]);
+	srgb = ft_split(split[4], ",");
+	if (ft_tablen(spos) != 3 || ft_tablen(sdir) != 3 || ft_tablen(srgb) != 3 || cub->side < EPSILON)
+	{
+		ft_abort(spos);
+		ft_abort(sdir);
+		ft_abort(srgb);
+		return (WRONG_ARG);
+	}
+	cub->origin = tabto_vect(spos);
+	cub->dirs[0] = tabto_vect(sdir);
+	cub->sqrs[0]->color = tabto_rgb(srgb);
+	ft_abort(srgb);
+	ft_abort(sdir);
+	ft_abort(spos);
+	if (norm(cub->dirs[0]) < EPSILON)
+		return (WRONG_ARG);
+	cub->dirs[0] = normalize(cub->dirs[0]);
+	set_faces(cub, cub->sqrs);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:03:35 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/14 17:32:44 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/15 19:05:25 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,17 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 
 void	create_img(t_cam *cam, t_scn *scn)
 {
-	//int	nthr;
-	//pthread_t	t[4];
-	//t_targs		arg[4];
+	int	nthr;
+	pthread_t	t[4];
+	t_targs		arg[4];
 	
 	set_cam(cam);
-	fill_img(&(t_targs){0, cam, scn});
-	/*
+	//fill_img(&(t_targs){0, cam, scn});
+	
 	nthr = 0;
 	while (nthr < 4)
 	{
-		arg[nthr] = (t_targs){nthr * scn->res.H/4, cam, scn, 2};
+		arg[nthr] = (t_targs){nthr * scn->res.H/4, cam, scn};
 		pthread_create(&t[nthr], NULL, (void*)fill_img, &arg[nthr]);
 		nthr++;
 	}
@@ -57,5 +57,5 @@ void	create_img(t_cam *cam, t_scn *scn)
 		if (t[nthr])
 			pthread_join(t[nthr], NULL);
 		nthr++;
-	}*/
+	}
 }

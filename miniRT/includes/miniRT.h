@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 20:40:00 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/15 02:42:33 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/15 19:45:09 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,12 @@
 # define EPSILON 0.00001
 
 # define OPEN_FAIL 1
-# define WINDOW_FAIL 2
-# define NO_RES 3
-# define NO_CAMERA 4
-# define WRONG_LINE 5
-# define WRONG_ARG 6
+# define IMG_FAIL 2
+# define WINDOW_FAIL 3
+# define NO_RES 4
+# define NO_CAMERA 5
+# define WRONG_LINE 6
+# define WRONG_ARG 7
 # define MALLOC_FAIL 100
 
 # define REFLECT 0
@@ -58,6 +59,7 @@ int				mouse_press(int button, int x, int y, t_scn *scn);
 void			create_all_img(t_scn *scn);
 void			create_img(t_cam *cam, t_scn *scn);
 void			set_cam(t_cam *cam);
+void			set_sqr(t_sqr *sqr);
 t_ray			find_ray(t_cam *cam, int i, int j, t_scn *scn);
 
 void			fill_img(t_targs *args);

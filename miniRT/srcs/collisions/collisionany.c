@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/17 23:27:39 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/15 02:45:26 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/15 16:55:54 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ t_rescl		collision_any(t_ray ray, t_scn *scn, t_vect *closest, double dmax)
 	{
 		best = col;
 		res.elem = elem;
-		res.type = "Square";
+		res.type = (((t_sqr*)elem)->cub) ? "Cube (Square)" : "Square";
 		res.normale = ((t_sqr*)elem)->normale;
 		res.color = ((t_sqr*)elem)->color;
 		res.pos = &((t_sqr*)elem)->origin;

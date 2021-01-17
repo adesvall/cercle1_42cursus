@@ -6,26 +6,21 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/18 11:00:18 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/15 02:43:14 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/15 18:57:50 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
 
-int		in_square(t_vect col, t_sqr car)
+int		in_square(t_vect col, t_sqr sqr)
 {
 	double X, Y;
-	t_vect right, down, v;
+	t_vect v;
 
-	v = diff(col, car.origin);
-	if (car.normale.x == 0 && car.normale.y == 0)
-		right = (t_vect){1, 0, 0};
-	else
-		right = normalize((t_vect){100 * car.normale.y, -100 * car.normale.x, 0});
-	down = normalize(prod_vect(car.normale, right));
-	X = dot(v, right);
-	Y = dot(v, down);
-	return (fabs(X) <= car.hauteur / 2 && fabs(Y) <= car.hauteur / 2);
+	v = diff(col, sqr.origin);
+	X = dot(v, sqr.right);
+	Y = dot(v, sqr.down);
+	return (fabs(X) <= sqr.side / 2 && fabs(Y) <= sqr.side / 2);
 }
 
 t_abc	abc_solve(double a, double b, double c)

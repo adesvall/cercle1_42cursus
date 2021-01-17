@@ -9,7 +9,7 @@ SRCS		= main/main.c \
 
 SRCSS		= ${addprefix srcs/, ${SRCS}}
 
-OBJS		= ${addprefix bin/, ${SRCSS:.c=.o}}
+OBJS		= ${SRCSS:.c=.o}
 
 CFLAGS		= -Wall -Wextra -I./includes -I/usr/include -Imlx_linux -lpthread -O3 -g
 
@@ -17,7 +17,6 @@ all:		${NAME}
 
 $(NAME):	${OBJS}
 			gcc -o ${NAME} ${OBJS} ${CFLAGS} -L.. -lmlx -L/usr/lib -lXext -lX11 -lm -lpthread -lbsd -g
-			
 
 .c.o:		
 			gcc ${CFLAGS} -c $< -o ${<:.c=.o}

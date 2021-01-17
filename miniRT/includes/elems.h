@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 17:48:36 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/15 01:52:42 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/15 18:57:50 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,24 @@ typedef	struct	s_pln
 	t_rgb	color;
 }				t_pln;
 
+typedef struct	s_sqr	t_sqr;
+typedef struct	s_cub
+{
+	t_vect	origin;
+	t_vect	dirs[3];
+	double	side;
+	t_sqr	*sqrs[6];
+}				t_cub;
+
 typedef struct	s_sqr
 {
 	t_vect	origin;
 	t_vect	normale;
-	double	hauteur;
+	t_vect	right;
+	t_vect	down;
+	double	side;
 	t_rgb	color;
+	t_cub	*cub;
 }				t_sqr;
 
 typedef struct	s_cyl	t_cyl;
@@ -90,7 +102,6 @@ typedef struct	s_sel
 	t_vect	*dir;
 }				t_sel;
 
-
 typedef struct	s_scn
 {
 	void    	*mlx;
@@ -111,6 +122,7 @@ typedef struct	s_scn
 	t_list		*dsks;
 	t_list		*cyls;
 	t_list		*tris;
+	t_list		*cubs;
 }				t_scn;
 
 typedef struct	s_targs

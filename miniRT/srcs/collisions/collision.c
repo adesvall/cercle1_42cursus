@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:31:37 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/15 02:43:03 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/15 19:08:34 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,7 @@ void		fill_img(t_targs *args)
 	int i;
 
 	i=0;
-	//while (i + args->i < args->scn->res.H && i < args->scn->res.H/4)
-	while (i < args->scn->res.H)
+	while (i + args->i < args->scn->res.H && i < args->scn->res.H/4)
 	{
 		j=0;
 		while (j < args->scn->res.W)
@@ -69,7 +68,7 @@ void		fill_img(t_targs *args)
 		}
 		i++;
 	}
-	//pthread_exit(NULL);
+	pthread_exit(NULL);
 }
 
 int		collision_pln(t_ray ray, void *elem, t_vect *coli)

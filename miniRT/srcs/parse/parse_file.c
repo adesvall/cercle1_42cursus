@@ -71,6 +71,7 @@ void	parse_file(t_scn *scn)
 	int		gnl;
 	int		fd;
 	
+	printf("\033[0;32mParsing...\n\033[0m");
 	if ((fd = open(scn->filename, O_RDONLY)) < 0)
 		handle_error("fail to open .rt file", OPEN_FAIL, scn);
 	gnl = 1;
@@ -104,8 +105,12 @@ void	parse_file(t_scn *scn)
 			res = add_cyl(split, scn, 1);
 		else if (strcmp(split[0], "tr") == 0)
 			res = add_tri(split, scn);
+		else if (strcmp(split[0], "cub") == 0)
+			res = add_cub(split, scn);
+		else
+			printf("-line : %s - ignored.\n", split[0]);
 		if (res != 0)
-			printf("%s %d\n", split[0], ft_tablen(split));
+			printf("Wrong line starting with \"%s\".\n", split[0]);
 		ft_abort(split);
 		free(line);
 		if (res != 0)
@@ -196,18 +201,18 @@ void	init_scn(t_scn *scn)
 	scn->car = malloc(4 * sizeof(t_cam));
 	scn->car[0].origin = (t_vect){125, 50, 20};
 	scn->car[0].normale = normalize((t_vect){0, 0, 1});
-	scn->car[0].hauteur = 50;
+	scn->car[0].side = 50;
 	scn->car[0].color = (t_rgb){200, 0, 10};
 	scn->car[0].reflect = 0.07;
 	scn->car[1].origin = (t_vect){100, 50, -5};
 	scn->car[1].normale = normalize((t_vect){1, 0, 0});
-	scn->car[1].hauteur = 50;
+	scn->car[1].side = 50;
 	scn->car[1].color = (t_rgb){200, 0, 10};
 	scn->car[1].reflect = 0.07;
 	scn->car[2].origin = (t_vect){125, 25, -5};
 	scn->car[2].normale = normalize((t_vect){0, -1, 0});
-	scn->car[2].hauteur = 50;
+	scn->car[2].side = 50;
 	scn->car[2].color = (t_rgb){200, 0, 10};
 	scn->car[2].reflect = 0.07;
-	scn->car[3].hauteur = 0;
+	scn->car[3].side = 0;
 }*/

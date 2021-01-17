@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/31 11:29:17 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/15 04:11:05 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/15 18:55:29 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	clean_scene(t_scn *scn)
 
 int		handle_error(char *msg, int err, t_scn *scn)
 {
-	printf("%s - code: %d\n", msg, err);
+	printf("Error %d: %s\n", err, msg);
 	clean_scene(scn);
 	if (scn->mlx_win)
 	{
@@ -69,7 +69,6 @@ void	reload_scn(t_scn *scn)
 	
 	clean_scene(scn);
 	scn->ambI = 0;
-	scn->res.H = 0;
 	parse_file(scn);
 	scn->actualcam = scn->cams;
 	cam = scn->actualcam->content;
@@ -125,26 +124,23 @@ void	move_vect(int key, t_vect *pos, t_vect *dir)
 void	move_selection(int key, t_scn *scn)
 {
 	t_cam	*cam;
-	t_dsk	*dsk;
+	t_cub	*cub;
 	t_cyl	*cyl;
 	
 	if (key != 100 && key != 122 && key != 115 && key != 65361 && key != 65363
 		&& key != 65364 && key != 65362 && key != 113 && key != 120 && key != 119) //zqsdwx<>^v
 		return ;
-	
-	if (!ft_strcmp(scn->sl_obj.type, "Cylinder (Disk)"))
-	{
-		dsk = scn->sl_obj.elem;
-		scn->sl_obj.pos = &dsk->cyl->origin;
-		scn->sl_obj.dir = &dsk->cyl->dir;
-		scn->sl_obj.type = "Cylinder";
-	}
 	move_vect(key, scn->sl_obj.pos, scn->sl_obj.dir);
 	if (!ft_strcmp(scn->sl_obj.type, "Cylinder"))
 	{	
 		cyl = scn->sl_obj.elem;
 		if (cyl->dsks[0])
 			set_caps(cyl, cyl->dsks[0], cyl->dsks[1]);
+	}
+	if (!ft_strcmp(scn->sl_obj.type, "Cube"))
+	{	
+		cub = scn->sl_obj.elem;
+		set_faces(cub, cub->sqrs);
 	}
 	create_img((cam = scn->actualcam->content), scn);
 	mlx_put_image_to_window(scn->mlx, scn->mlx_win, cam->data.img, 0, 0);
@@ -168,15 +164,34 @@ int		get_keypress(int key, t_scn *scn)
 
 int		mouse_press(int button, int x, int y, t_scn *scn)
 {
-	t_rescl res;
-	t_cam *cam = scn->actualcam->content;
-
+	t_rescl	res;
+	t_cam 	*cam;
+	t_dsk	*dsk;
+	t_sqr	*sqr;
+	
+	cam = scn->actualcam->content;
 	if (button == Button1 && (res = collision_any(find_ray(cam, y, x, scn), scn, NULL, -1)).elem != NULL)
 	{
 		scn->sl_obj.type = res.type;
 		scn->sl_obj.elem = res.elem;
 		scn->sl_obj.pos = res.pos;
 		scn->sl_obj.dir = res.dir;
+		if (!ft_strcmp(scn->sl_obj.type, "Cylinder (Disk)"))
+		{
+			dsk = scn->sl_obj.elem;
+			scn->sl_obj.pos = &dsk->cyl->origin;
+			scn->sl_obj.dir = &dsk->cyl->dir;
+			scn->sl_obj.type = "Cylinder";
+			scn->sl_obj.elem = dsk->cyl;
+		}
+		if (!ft_strcmp(scn->sl_obj.type, "Cube (Square)"))
+		{
+			sqr = scn->sl_obj.elem;
+			scn->sl_obj.pos = &sqr->cub->origin;
+			scn->sl_obj.dir = &sqr->cub->dirs[0];
+			scn->sl_obj.type = "Cube";
+			scn->sl_obj.elem = sqr->cub;
+		}
 		if (res.dir)
 			printf("You selected %s at (%.0f,%.0f,%.0f) with direction (%.2f,%.2f,%.2f).\n", res.type,
 					scn->sl_obj.pos->x, scn->sl_obj.pos->y, scn->sl_obj.pos->z,

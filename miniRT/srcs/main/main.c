@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:01:38 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/14 17:32:44 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/15 20:01:37 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	create_window(t_scn *scn)
 {
-	printf("Creating window...\n");
+	printf("\033[0;32mCreating window...\n\033[0m");
 	if (!(scn->mlx_win = mlx_new_window(scn->mlx, scn->res.W, scn->res.H, "miniRT")))
 		handle_error("Fail to create Minilibx window", WINDOW_FAIL, scn);
 	scn->actualcam = scn->cams;
@@ -41,12 +41,22 @@ void	create_all_img(t_scn *scn)
     while (ite)
     {
         cam = (t_cam*)ite->content;
-		cam->data.img = mlx_new_image(scn->mlx, scn->res.W, scn->res.H);
+		if (!(cam->data.img = mlx_new_image(scn->mlx, scn->res.W, scn->res.H)))
+			handle_error("failed to create img.", IMG_FAIL, scn);
         cam->data.addr = mlx_get_data_addr(cam->data.img, &cam->data.bits_per_pixel, &cam->data.line_length,
                                 &cam->data.endian);
         create_img(cam, scn);
         ite = ite->next;
     }
+}
+
+void	set_sqr(t_sqr *sqr)
+{
+	if (sqr->normale.x == 0 && sqr->normale.y == 0)
+		sqr->right = (t_vect){1, 0, 0};
+	else
+		sqr->right = normalize((t_vect){100 * sqr->normale.y, -100 * sqr->normale.x, 0});
+	sqr->down = normalize(prod_vect(sqr->normale, sqr->right));
 }
 
 void	set_cam(t_cam *cam)

@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 21:04:45 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/15 02:00:04 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/15 19:40:31 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ typedef struct  s_data
     int		bits_per_pixel;
     int		line_length;
     int		endian;
+	int		W;
+	int		H;
 }               t_data;
 
 typedef struct	s_vect
