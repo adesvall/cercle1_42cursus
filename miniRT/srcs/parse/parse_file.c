@@ -117,7 +117,7 @@ void	parse_file(t_scn *scn)
 			handle_error("Parsing error", res, scn);
 	}
 	close(fd);
-	if ((scn->ncam = ft_lstsize(scn->cams)) == 0)
+	if (scn->cams == NULL)
 		handle_error("no camera available", NO_CAMERA, scn);
 	if (!scn->res.W || !scn->res.H)
 		handle_error("no resolution", NO_RES, scn);

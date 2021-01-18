@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 17:48:36 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/15 18:57:50 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/17 09:34:05 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,11 +106,11 @@ typedef struct	s_scn
 {
 	void    	*mlx;
     void    	*mlx_win;
+	t_data		sky;
 	char		*filename;
 	t_couple	res;
 	double 		ambI;
 	t_vect		ambCol;
-	int			ncam;
 	t_list		*actualcam;
 	t_list		*actuallum;
 	t_sel		sl_obj;

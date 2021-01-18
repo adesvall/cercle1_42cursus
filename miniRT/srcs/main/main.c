@@ -6,7 +6,7 @@
 /*   By: adesvall <adesvall@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 21:01:38 by adesvall          #+#    #+#             */
-/*   Updated: 2021/01/15 20:01:37 by adesvall         ###   ########.fr       */
+/*   Updated: 2021/01/17 13:53:18 by adesvall         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int		main(int argc, char **argv)
 	parse_file(&scn);
     scn.mlx = mlx_init();
 	printf("\033[0;32mRendering miniRT...\n\033[0m");
+	create_sky(&scn, "skybox2_ny.xpm");
     create_all_img(&scn);
 	if (argc == 3 && !ft_strcmp(argv[2], "-save"))
 	{
@@ -89,10 +90,8 @@ int		main(int argc, char **argv)
 		save_bmp("save.bmp", (unsigned char*)((t_cam*)scn.actualcam->content)->data.addr, &scn);
 		exit_and_free(&scn);
 	}
-    else
-	{
-		if (argc == 3)
-			printf("Second argument ignored.\n");
+    else if (argc == 2)
 		create_window(&scn);
-	}
+	else
+		printf("Wrong arguments.\n");
 }
